@@ -365,7 +365,7 @@ namespace ProjectEuler
         {
             int linesNumber = 0, triangularCounter1 = 0;
             using (var sr = new StreamReader(
-                       $@"C:\Users\admin\RiderProjects\ProjectEuler\problem{_chosenProblem}.txt"))
+                       $@"C:\Users\admin\RiderProjects\ProjectEuler\problem{_chosenProblem}.txt")) // !!! podana sciezka do pliku - znalezc inne roziwazanie
             {
                 while (sr.ReadLine() is { })
                 {
@@ -375,7 +375,7 @@ namespace ProjectEuler
 
             var triangleTable = new string[linesNumber, linesNumber];
             using (var sr = new StreamReader(
-                       $@"C:\Users\admin\RiderProjects\ProjectEuler\problem{_chosenProblem}.txt"))
+                       $@"C:\Users\admin\RiderProjects\ProjectEuler\problem{_chosenProblem}.txt")) // !!! tu tez
             {
                 while (sr.ReadLine() is { } line)
                 {

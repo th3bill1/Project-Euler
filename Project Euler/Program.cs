@@ -11,7 +11,6 @@ namespace Project_Euler
         {
             var programActive = true;
             var chosenProblem = 0;
-            const string sol = "Solution for problem:";
             while (programActive)
             {
                 var probNumBool = true;
@@ -37,7 +36,7 @@ namespace Project_Euler
                 }
 
                 Console.WriteLine(UsefulTools.ProblemText(chosenProblem));
-                Console.WriteLine(sol);
+                Console.WriteLine("Solution for problem:");
 
                 var stopwatch = new Stopwatch();
 
