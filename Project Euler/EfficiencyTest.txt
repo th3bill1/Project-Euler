@@ -1,0 +1,25 @@
+Problem 23 - 5595 miliseconds
+Problem 14 - 1969 miliseconds
+Problem 22 - 1600 miliseconds
+Problem 10 - 699 miliseconds
+Problem 8 - 266 miliseconds
+Problem 12 - 217 miliseconds
+Problem 13 - 102 miliseconds
+Problem 11 - 87 miliseconds
+Problem 16 - 11 miliseconds
+Problem 7 - 11 miliseconds
+Problem 21 - 9 miliseconds
+Problem 9 - 9 miliseconds
+Problem 3 - 9 miliseconds
+Problem 25 - 2 miliseconds
+Problem 18 - 2 miliseconds
+Problem 4 - 2 miliseconds
+Problem 24 - less than one milisecond
+Problem 20 - less than one milisecond
+Problem 19 - less than one milisecond
+Problem 17 - less than one milisecond
+Problem 15 - less than one milisecond
+Problem 6 - less than one milisecond
+Problem 5 - less than one milisecond
+Problem 2 - less than one milisecond
+Problem 1 - less than one milisecond

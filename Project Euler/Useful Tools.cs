@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -146,6 +148,90 @@ namespace ProjectEuler
                 x *= i;
             }
             return x;
+        }
+        private static long[,] EfficiencyTest(int numberOfProblems)
+        {
+            var allTimes = new long[numberOfProblems, 2];
+            var stopwatch = new Stopwatch();
+            for (var i = 1; i <= numberOfProblems; i++)
+            {
+                stopwatch.Reset();
+                stopwatch.Start();
+                ProblemsSolved.ChosenProblem(i, false);
+                stopwatch.Stop();
+                allTimes[i - 1, 1] = i;
+                allTimes[i - 1, 0] = stopwatch.ElapsedMilliseconds;
+                if (ProblemsSolved.ChosenProblemNumber != i)
+                {
+                    allTimes[i - 1, 0] = -1;
+                }
+            }
+
+            var n = numberOfProblems;
+            while (n > 0)
+            {
+
+                for (var i = 0; i < n - 1; i++)
+                {
+                    if (allTimes[i, 0] <= allTimes[i + 1, 0]) continue;
+                    (allTimes[i, 0], allTimes[i + 1, 0]) = (allTimes[i + 1, 0], allTimes[i, 0]);
+                    (allTimes[i, 1], allTimes[i + 1, 1]) = (allTimes[i + 1, 1], allTimes[i, 1]);
+                }
+                n--;
+            }
+
+            return allTimes;
+        }
+        public static void EfficiencyTestToFile(int numberOfProblems)
+        {
+            var timesTable = EfficiencyTest(numberOfProblems);
+            using var sw = new StreamWriter($@"{Environment.CurrentDirectory}..\..\..\..\EfficiencyTest.txt");
+            for (var i = numberOfProblems - 1; i >= 0; i--)
+            {
+                switch (timesTable[i, 0])
+                {
+                    case -1:
+                        sw.WriteLine($"Problem {timesTable[i, 1]} not solved yet");
+                        break;
+                    case < 1:
+                        sw.WriteLine($"Problem {timesTable[i, 1]} - less than one milisecond");
+                        break;
+                    case > 1:
+                        sw.WriteLine($"Problem {timesTable[i, 1]} - {timesTable[i, 0]} miliseconds");
+                        break;
+                    case 1:
+                        sw.WriteLine($"Problem {timesTable[i, 1]} - 1 milisecond");
+                        break;
+                }
+            }
+        }
+
+        public static void EfficiencyTestTop(int numberOfProblems, int howManyTop)
+        {
+            var timesTable = EfficiencyTest(numberOfProblems);
+            for (var i = numberOfProblems - 1; i >= numberOfProblems - howManyTop; i--)
+            {
+                Console.WriteLine($"Problem {timesTable[i, 1]} Time: {timesTable[i, 0]}");
+            }
+        }
+        public static string TimeConversion(TimeSpan x)
+        {
+            var minimum = new TimeSpan(0, 0, 0, 0, 1);
+            var timeSpent = "";
+            if (x.Days > 0) timeSpent += $"{x.Days} days ";
+            if (x.Days == 1) timeSpent += $"1 day ";
+            if (x.Hours > 0) timeSpent += $"{x.Hours} hours ";
+            if (x.Hours == 1) timeSpent += $"1 hour ";
+            if (x.Minutes > 0) timeSpent += $"{x.Minutes} minutes ";
+            if (x.Seconds > 1) timeSpent += $"{x.Seconds} seconds and ";
+            if (x.Seconds == 1) timeSpent += $"1 second and ";
+            if (x.Milliseconds > 1) timeSpent += $"{x.Milliseconds} miliseconds";
+            if (x.Milliseconds == 1) timeSpent += $"1 milisecond";
+            if (x > minimum)
+            {
+                return $"Solution took {timeSpent}."; 
+            }
+            return "Solution took less than 1 milisecond!";
         }
     }
 }

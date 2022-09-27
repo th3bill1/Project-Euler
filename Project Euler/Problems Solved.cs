@@ -1,26 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 namespace ProjectEuler
 {
     public static class ProblemsSolved
     {
-        private static int _chosenProblem;
-        public static void ChoosingProblem(int chosenProblemNumber)
+        private static string _path;
+        public static int ChosenProblemNumber;
+        private static bool _isShowingAnswer;
+        public static void ChosenProblem(int chosenProblemNumber, bool showAnswer)
         {
             var chosenProblemName = "Problem" + Convert.ToString(chosenProblemNumber);
             var type = typeof(ProblemsSolved);
             var info = type.GetMethod(chosenProblemName);
             if (info != null)
             {
-                _chosenProblem = chosenProblemNumber;
+                ChosenProblemNumber = chosenProblemNumber;
+                _isShowingAnswer = showAnswer;
+                _path = $@"{Environment.CurrentDirectory}..\..\..\..\problem{ChosenProblemNumber}.txt";
                 info.Invoke(null, null);
             }
-            else Console.WriteLine("There is no solution for this problem avaliable!");
+            else if (_isShowingAnswer) Console.WriteLine("There is no solution for this problem avaliable!");
         }
 
         public static void Problem1()
@@ -31,7 +38,8 @@ namespace ProjectEuler
                 if (i % 3 == 0 | i % 5 == 0)
                     answer += i;
             }
-            Console.WriteLine(answer);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer);
         }
 
         public static void Problem2()
@@ -46,7 +54,8 @@ namespace ProjectEuler
                     answer += fibb2;
                 fibb2 += fibb1;
             }
-            Console.WriteLine(answer);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer);
         }
 
         public static void Problem3()
@@ -59,7 +68,8 @@ namespace ProjectEuler
                 answer = i;
                 break;
             }
-            Console.WriteLine(answer);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer);
         }
 
         public static void Problem4()
@@ -73,7 +83,8 @@ namespace ProjectEuler
                         answer4 = i * j;
                 }
             }
-            Console.WriteLine(answer4);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer4);
         }
 
         public static void Problem5()
@@ -84,7 +95,8 @@ namespace ProjectEuler
                 answer5 = UsefulTools.Lcm(answer5, i);
             }
 
-            Console.WriteLine(answer5);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer5);
         }
 
         public static void Problem6()
@@ -102,7 +114,9 @@ namespace ProjectEuler
 
             squareSum = Convert.ToInt32(Math.Pow(squareSum, 2));
             var answer6 = squareSum - sumSquare;
-            Console.WriteLine(answer6);
+
+            if (_isShowingAnswer)
+                Console.WriteLine(answer6);
         }
 
         public static void Problem7()
@@ -117,7 +131,8 @@ namespace ProjectEuler
                 }
             }
 
-            Console.WriteLine(answer7);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer7);
         }
 
         [Obsolete("Obsolete")]
@@ -146,7 +161,8 @@ namespace ProjectEuler
                     answer8 = multiply;
             }
 
-            Console.WriteLine(answer8);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer8);
         }
 
         public static void Problem9()
@@ -165,7 +181,8 @@ namespace ProjectEuler
             }
 
         Answer9:
-            Console.WriteLine(answer9);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer9);
         }
         public static void Problem10()
         {
@@ -178,7 +195,8 @@ namespace ProjectEuler
                 }
             }
 
-            Console.WriteLine(answer10);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer10);
         }
         [Obsolete("Obsolete")]
         public static void Problem11()
@@ -245,7 +263,8 @@ namespace ProjectEuler
                 }
             }
 
-            Console.WriteLine(answer11);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer11);
         }
         public static void Problem12()
         {
@@ -258,7 +277,8 @@ namespace ProjectEuler
                 noTh += 1;
             }
 
-            Console.WriteLine(answer12);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer12);
         }
         [Obsolete("Obsolete")]
         public static void Problem13()
@@ -289,7 +309,8 @@ namespace ProjectEuler
 
             answer13 += Convert.ToInt64(digitsSum * Math.Pow(10, helper));
             answer13 = Convert.ToInt64(answer13.ToString()[..10]);
-            Console.WriteLine(answer13);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer13);
         }
         public static void Problem14()
         {
@@ -317,11 +338,13 @@ namespace ProjectEuler
                 answer14 = i;
             }
 
-            Console.WriteLine(answer14);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer14);
         }
         public static void Problem15()
         {
-            Console.WriteLine(UsefulTools.BinomialCooficient(40, 20));
+            if (_isShowingAnswer) 
+                Console.WriteLine(UsefulTools.BinomialCooficient(40, 20));
         }
         public static void Problem16()
         {
@@ -345,7 +368,8 @@ namespace ProjectEuler
                 answer16 += twoPowersDigits[i];
             }
 
-            Console.WriteLine(answer16);
+            if (_isShowingAnswer)
+                Console.WriteLine(answer16);
         }
         public static void Problem17()
         {
@@ -356,13 +380,13 @@ namespace ProjectEuler
                 answer17 += numberInWords.Length;
             }
 
-            Console.WriteLine(answer17);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer17);
         }
         public static void Problem18()
         {
             int linesNumber = 0, triangularCounter1 = 0;
-            string path = $@"{Environment.CurrentDirectory}..\..\..\..\problem{_chosenProblem}.txt";
-            using (var sr = new StreamReader(path))
+            using (var sr = new StreamReader(_path))
             {
                 while (sr.ReadLine() is { })
                 {
@@ -371,7 +395,7 @@ namespace ProjectEuler
             }
 
             var triangleTable = new string[linesNumber, linesNumber];
-            using (var sr = new StreamReader(path))
+            using (var sr = new StreamReader(_path))
             {
                 while (sr.ReadLine() is { } line)
                 {
@@ -402,7 +426,8 @@ namespace ProjectEuler
                 }
             }
 
-            Console.WriteLine(triangleTable[0, 0]);
+            if (_isShowingAnswer) 
+                Console.WriteLine(triangleTable[0, 0]);
         }
         public static void Problem19()
         {
@@ -440,7 +465,8 @@ namespace ProjectEuler
                 dayOfWeek += 1;
             }
 
-            Console.WriteLine(answer19);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer19);
         }
         public static void Problem20()
         {
@@ -464,7 +490,8 @@ namespace ProjectEuler
                 answer20 += factorial[i];
             }
 
-            Console.WriteLine(answer20);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer20);
         }
         public static void Problem21()
         {
@@ -476,7 +503,74 @@ namespace ProjectEuler
                     answer21 += i;
             }
 
-            Console.WriteLine(answer21);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer21);
+        }
+        public static void Problem22()
+        {
+            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string allNames, currName = "", tempName;
+            int y, tempSum;
+            var names = new List<string>();
+            using (StreamReader sr = new(_path))
+            {
+                allNames = sr.ReadToEnd();
+            }
+            foreach (char c in allNames)
+            {
+                if (c=='"')
+                {
+                    _ = allNames.Remove(c);
+                    continue;
+                }
+                if (c==',')
+                {
+                    names.Add(currName);
+                    currName = "";
+                    continue;
+                }
+                currName += c;
+            }
+            names.Add(currName);
+            int n = names.Count;
+            for (int w = 0; w < n; w++)
+            {
+                for (int x = 0; x < n-w-1; x++)
+                {
+                    y = 0;
+                    while (true)
+                    {
+                        if (y > names[x+1].Length - 1 && y <= names[x].Length - 1)
+                        {
+                            tempName = names[x];
+                            names[x] = names[x + 1];
+                            names[x + 1] = tempName;
+                            break;
+                        }
+                        if (y > names[x].Length-1) break;
+                        if (alphabet.IndexOf(names[x][y]) > alphabet.IndexOf(names[x + 1][y]))
+                        {
+                            tempName = names[x];
+                            names[x] = names[x + 1];
+                            names[x + 1] = tempName;
+                        }
+                        if (alphabet.IndexOf(names[x][y]) != alphabet.IndexOf(names[x + 1][y])) break;
+                        y += 1;
+                    }
+                }
+            }
+            int answer22 = 0;
+            for (int x = 0; x< n;x++)
+            {
+                tempSum = 0;
+                for(int z = 0; z < names[x].Length;z++)
+                {
+                    tempSum+=alphabet.IndexOf(names[x][z])+1;
+                }
+                answer22 += tempSum*(x+1);
+            }
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer22);
         }
         public static void Problem23()
         {
@@ -502,7 +596,8 @@ namespace ProjectEuler
                 if (!CanBeWrittenAsSumOfAbundant(i)) answer23 += i;
             }
 
-            Console.WriteLine(answer23);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer23);
         }
         public static void Problem24()
         {
@@ -522,7 +617,8 @@ namespace ProjectEuler
                 digitsS = digitsS.Remove(max, 1);
                 milion -= UsefulTools.Factorial(10 - (i + 1)) * max;
             }
-            Console.WriteLine(answer24);
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer24);
         }
         public static void Problem25()
         {
@@ -538,21 +634,8 @@ namespace ProjectEuler
             }
 
             BigInteger answer25 = BigInteger.Log10(currentFibb2) + 1 >= 1000 ? indexFibb - 1 : indexFibb;
-            Console.WriteLine(answer25);
-        }
-        public static void Problem67()
-        {
-            Problem18();
-        }
-        public static void Problem2137()
-        {
-            Console.WriteLine("Karzel ded");
-            var p = new Process
-            {
-                StartInfo = new ProcessStartInfo(@"C:\Users\admin\RiderProjects\ProjectEuler\gnome-bonk.gif")
-                { UseShellExecute = true }
-            };
-            p.Start();
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer25);
         }
         public static void Problem27()
         {
@@ -574,7 +657,23 @@ namespace ProjectEuler
                     }
                 }
             }
-            Console.WriteLine(answer27);
-        } 
+            if (_isShowingAnswer) 
+                Console.WriteLine(answer27);
+        }
+        public static void Problem67()
+        {
+            Problem18();
+        }
+        public static void Problem2137()
+        {
+            Console.WriteLine("Karzel ded");
+            var p = new Process
+            {
+                StartInfo = new ProcessStartInfo(@"C:\Users\admin\RiderProjects\ProjectEuler\gnome-bonk.gif")
+                { UseShellExecute = true }
+            };
+            p.Start();
+        }
+       
     }
 }

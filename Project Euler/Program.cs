@@ -1,8 +1,7 @@
-﻿using ProjectEuler;
-using System;
+﻿using System;
 using System.Diagnostics;
 
-namespace Project_Euler
+namespace ProjectEuler
 {
     internal static class ProjectEuler
     {
@@ -11,16 +10,21 @@ namespace Project_Euler
         {
             var programActive = true;
             var chosenProblem = 0;
+            const int numberOfProblems = 806;
+            const string sol = "Solution for problem:";
             while (programActive)
             {
                 var probNumBool = true;
                 while (probNumBool)
                 {
-                    Console.WriteLine("\nPut the number of problem to see its answer (If you want to leave put 0):");
+                    Console.WriteLine("\n(If you want to leave put 0):");
+                    Console.WriteLine("\n(If you want to perform efficiency test put 1001):");
+                    Console.WriteLine("\n(If you want to perform efficiency test and save data to file put 2002):");
+                    Console.WriteLine("\nPut the number of problem to see its answer or action you want to perform:");
                     var choice = Console.ReadLine();
                     if (int.TryParse(choice, out var intChoice))
                     {
-                        if (intChoice < 807 & intChoice >= 0 | intChoice == 2137)
+                        if (intChoice <= numberOfProblems & intChoice >= 0 | intChoice == 2137 | intChoice == 1001 | intChoice == 2002)
                         {
                             chosenProblem = intChoice;
                             probNumBool = false;
@@ -34,29 +38,35 @@ namespace Project_Euler
                     Console.WriteLine("Thanks for using the program! It will shut down now.");
                     programActive = false;
                 }
+                if (chosenProblem == 1001)
+                {
+                    Console.WriteLine("How many problems to check?");
+                    var howManyToCheck = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("How many top problems to show?");
+                    var howManyToShow = Convert.ToInt32(Console.ReadLine());
+                    UsefulTools.EfficiencyTestTop(howManyToCheck, howManyToShow);
+                    continue;
+                }
+                if (chosenProblem == 2002)
+                {
+                    Console.WriteLine("How many problems to check?");
+                    var howManyToCheck2 = Convert.ToInt32(Console.ReadLine());
+                    UsefulTools.EfficiencyTestToFile(howManyToCheck2);
+                    Console.WriteLine("Efficiency test was performed succesfully!");
+                    continue;
+                }
 
                 Console.WriteLine(UsefulTools.ProblemText(chosenProblem));
-                Console.WriteLine("Solution for problem:");
+                Console.WriteLine(sol);
 
                 var stopwatch = new Stopwatch();
 
                 stopwatch.Start();
-                ProblemsSolved.ChoosingProblem(chosenProblem);
+                ProblemsSolved.ChosenProblem(chosenProblem, true);
                 stopwatch.Stop();
 
                 var ts = stopwatch.Elapsed;
-                var minimum = new TimeSpan(0, 0, 0, 0, 1);
-                var timeSpent = "";
-                if (ts.Days > 0) timeSpent += $"{ts.Days} days ";
-                if (ts.Hours > 0) timeSpent += $"{ts.Hours} hours ";
-                if (ts.Minutes > 0) timeSpent += $"{ts.Minutes} minutes ";
-                if (ts.Seconds > 0) timeSpent += $"{ts.Seconds} seconds and ";
-                if (ts.Milliseconds >= 0) timeSpent += $"{ts.Milliseconds} miliseconds";
-                if (ts > minimum)
-                {
-                    Console.WriteLine($"Solution took {timeSpent}."); continue;
-                }
-                Console.WriteLine("Solution took less than 1 milisecond!");
+                Console.WriteLine(UsefulTools.TimeConversion(ts));
             }
         }
     }
