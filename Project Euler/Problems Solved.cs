@@ -323,7 +323,6 @@ namespace ProjectEuler
         {
             Console.WriteLine(UsefulTools.BinomialCooficient(40, 20));
         }
-
         public static void Problem16()
         {
             var answer16 = 0;
@@ -348,7 +347,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer16);
         }
-
         public static void Problem17()
         {
             var answer17 = 0;
@@ -360,7 +358,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer17);
         }
-
         public static void Problem18()
         {
             int linesNumber = 0, triangularCounter1 = 0;
@@ -407,7 +404,6 @@ namespace ProjectEuler
 
             Console.WriteLine(triangleTable[0, 0]);
         }
-
         public static void Problem19()
         {
             int dayOfWeek = 11, answer19 = 0;
@@ -446,7 +442,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer19);
         }
-
         public static void Problem20()
         {
             var answer20 = 0;
@@ -471,7 +466,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer20);
         }
-
         public static void Problem21()
         {
             var answer21 = 0;
@@ -484,7 +478,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer21);
         }
-
         public static void Problem23()
         {
             long answer23 = 0;
@@ -511,39 +504,6 @@ namespace ProjectEuler
 
             Console.WriteLine(answer23);
         }
-
-        public static void Problem25()
-        {
-            double fibbLength = 0;
-            var indexFibb = 2;
-            BigInteger currentFibb1 = 1, currentFibb2 = 1;
-            while (fibbLength < 1000)
-            {
-                currentFibb2 += currentFibb1;
-                currentFibb1 += currentFibb2;
-                fibbLength = BigInteger.Log10(currentFibb1) + 1;
-                indexFibb += 2;
-            }
-
-            BigInteger answer25 = BigInteger.Log10(currentFibb2) + 1 >= 1000 ? indexFibb - 1 : indexFibb;
-            Console.WriteLine(answer25);
-        }
-
-        public static void Problem67()
-        {
-            Problem18();
-        }
-
-        public static void Problem2137()
-        {
-            Console.WriteLine("Karzel ded");
-            var p = new Process
-            {
-                StartInfo = new ProcessStartInfo(@"C:\Users\admin\RiderProjects\ProjectEuler\gnome-bonk.gif")
-                { UseShellExecute = true }
-            };
-            p.Start();
-        }
         public static void Problem24()
         {
             var milion = 1000000;
@@ -564,5 +524,57 @@ namespace ProjectEuler
             }
             Console.WriteLine(answer24);
         }
+        public static void Problem25()
+        {
+            double fibbLength = 0;
+            var indexFibb = 2;
+            BigInteger currentFibb1 = 1, currentFibb2 = 1;
+            while (fibbLength < 1000)
+            {
+                currentFibb2 += currentFibb1;
+                currentFibb1 += currentFibb2;
+                fibbLength = BigInteger.Log10(currentFibb1) + 1;
+                indexFibb += 2;
+            }
+
+            BigInteger answer25 = BigInteger.Log10(currentFibb2) + 1 >= 1000 ? indexFibb - 1 : indexFibb;
+            Console.WriteLine(answer25);
+        }
+        public static void Problem67()
+        {
+            Problem18();
+        }
+        public static void Problem2137()
+        {
+            Console.WriteLine("Karzel ded");
+            var p = new Process
+            {
+                StartInfo = new ProcessStartInfo(@"C:\Users\admin\RiderProjects\ProjectEuler\gnome-bonk.gif")
+                { UseShellExecute = true }
+            };
+            p.Start();
+        }
+        public static void Problem27()
+        {
+            int answer27 = 0, y = 0;
+            for (var a = -999; a < 1000; a++)
+            {
+                for (var b = -999; b < 1000; b++)
+                {
+                    int x = 0;
+                    while (true)
+                    {
+                        if (!UsefulTools.IsPrime(Convert.ToInt32(Math.Pow(x, 2) + a * x + b))) break;
+                        x++;
+                    }
+                    if (x > y)
+                    {
+                        y = x;
+                        answer27 = a * b;
+                    }
+                }
+            }
+            Console.WriteLine(answer27);
+        } 
     }
 }
