@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 namespace ProjectEuler
@@ -428,6 +426,8 @@ namespace ProjectEuler
 
             if (_isShowingAnswer) 
                 Console.WriteLine(triangleTable[0, 0]);
+
+            
         }
         public static void Problem19()
         {
@@ -490,7 +490,7 @@ namespace ProjectEuler
                 answer20 += factorial[i];
             }
 
-            if (_isShowingAnswer) 
+            if (_isShowingAnswer)
                 Console.WriteLine(answer20);
         }
         public static void Problem21()
@@ -503,7 +503,7 @@ namespace ProjectEuler
                     answer21 += i;
             }
 
-            if (_isShowingAnswer) 
+            if (_isShowingAnswer)
                 Console.WriteLine(answer21);
         }
         public static void Problem22()
@@ -571,6 +571,8 @@ namespace ProjectEuler
             }
             if (_isShowingAnswer) 
                 Console.WriteLine(answer22);
+
+
         }
         public static void Problem23()
         {
