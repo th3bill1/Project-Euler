@@ -8,7 +8,6 @@ namespace ProjectEuler
 {
     public static class UsefulTools
     {
-        [Obsolete("Obsolete")]
         public static string ProblemText(int problemNumber)
         {
             var wc = new WebClient();
@@ -85,7 +84,7 @@ namespace ProjectEuler
         }
         public static bool IsPalindrome(int x)
         {
-            int original = x, reverse = 0;
+            long original = x, reverse = 0;
             while (x != 0)
             {
                 var rem = x % 10;
@@ -157,7 +156,7 @@ namespace ProjectEuler
             {
                 stopwatch.Reset();
                 stopwatch.Start();
-                ProblemsSolved.ChosenProblem(i, false);
+                ProblemsSolved.ChosenProblem(i, false, false);
                 stopwatch.Stop();
                 allTimes[i - 1, 1] = i;
                 allTimes[i - 1, 0] = stopwatch.ElapsedMilliseconds;
@@ -165,6 +164,7 @@ namespace ProjectEuler
                 {
                     allTimes[i - 1, 0] = -1;
                 }
+                Console.Write("\r{0}   ", $"Progress: {i}/{numberOfProblems}");
             }
 
             var n = numberOfProblems;
@@ -211,7 +211,7 @@ namespace ProjectEuler
             var timesTable = EfficiencyTest(numberOfProblems);
             for (var i = numberOfProblems - 1; i >= numberOfProblems - howManyTop; i--)
             {
-                Console.WriteLine($"Problem {timesTable[i, 1]} Time: {timesTable[i, 0]}");
+                Console.WriteLine($"\nProblem {timesTable[i, 1]} Time: {timesTable[i, 0]}");
             }
         }
         public static string TimeConversion(TimeSpan x)
@@ -232,6 +232,14 @@ namespace ProjectEuler
                 return $"Solution took {timeSpent}."; 
             }
             return "Solution took less than 1 milisecond!";
+        }
+        public static bool IsPalindromeString(string x)
+        {
+            for(int i = 0; i< x.Length/2; i++)
+            {
+                if (x[i] != x[x.Length - i-1]) return false;
+            }
+            return true;
         }
     }
 }

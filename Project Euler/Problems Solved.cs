@@ -13,7 +13,9 @@ namespace ProjectEuler
         private static string _path;
         public static int ChosenProblemNumber;
         private static bool _isShowingAnswer;
-        public static void ChosenProblem(int chosenProblemNumber, bool showAnswer)
+        const string sol = "Solution for problem:";
+
+        public static void ChosenProblem(int chosenProblemNumber, bool showAnswer, bool _isShowingTime)
         {
             var chosenProblemName = "Problem" + Convert.ToString(chosenProblemNumber);
             var type = typeof(ProblemsSolved);
@@ -23,7 +25,23 @@ namespace ProjectEuler
                 ChosenProblemNumber = chosenProblemNumber;
                 _isShowingAnswer = showAnswer;
                 _path = $@"{Environment.CurrentDirectory}..\..\..\..\problem{ChosenProblemNumber}.txt";
+                if (_isShowingAnswer)
+                {
+                    Console.WriteLine(UsefulTools.ProblemText(chosenProblemNumber));
+                    Console.WriteLine(sol);
+                }
+                var stopwatch = new Stopwatch();
+
+                if (_isShowingTime) stopwatch.Start();
+
                 info.Invoke(null, null);
+
+                if (_isShowingTime)
+                {
+                    stopwatch.Stop();
+                    var ts = stopwatch.Elapsed;
+                    Console.WriteLine(UsefulTools.TimeConversion(ts));
+                }
             }
             else if (_isShowingAnswer) Console.WriteLine("There is no solution for this problem avaliable!");
         }
@@ -662,6 +680,54 @@ namespace ProjectEuler
             if (_isShowingAnswer) 
                 Console.WriteLine(answer27);
         }
+        public static void Problem28()
+        {
+            int max = 1001*1001, answer = 0, addition = 2, tempnum = 1;
+            while (tempnum<=max)
+            {
+                for (int i = 1; i<5; i++)
+                {
+                    answer += tempnum;
+                    tempnum += addition;
+                    if (tempnum > max) break;
+                }
+                addition += 2;
+            }
+            if (_isShowingAnswer)
+                Console.WriteLine(answer);
+        }
+        public static void Problem36()
+        {
+            var answer = 0;
+            for (int i = 1; i<1000000; i++)
+            {
+                if (i % 10 == 0 | i % 2 == 0) continue;
+                if (UsefulTools.IsPalindrome(i) && UsefulTools.IsPalindromeString(Convert.ToString(i, 2))) answer += i;
+            }
+            if (_isShowingAnswer)
+                Console.WriteLine(answer);
+        }
+        public static void Problem46()
+        {
+            bool a = true;
+            int answer = 3;
+            while(a)
+            {
+                
+                if (answer % 2 != 0 && !UsefulTools.IsPrime(answer))
+                {
+                    for (int j = 1; j <= Math.Sqrt(answer / 2); j++)
+                    {
+                        if (UsefulTools.IsPrime(answer - Convert.ToInt32(Math.Pow(j, 2)) * 2)) goto NextNum;
+                    }
+                    a = false;
+                }
+                NextNum:
+                answer++;
+            }
+            if (_isShowingAnswer)
+               Console.WriteLine(answer-1);
+        }
         public static void Problem67()
         {
             Problem18();
@@ -671,7 +737,7 @@ namespace ProjectEuler
             Console.WriteLine("Karzel ded");
             var p = new Process
             {
-                StartInfo = new ProcessStartInfo(@"C:\Users\admin\RiderProjects\ProjectEuler\gnome-bonk.gif")
+                StartInfo = new ProcessStartInfo($@"{Environment.CurrentDirectory}..\..\..\..\gnome-bonk.gif")
                 { UseShellExecute = true }
             };
             p.Start();

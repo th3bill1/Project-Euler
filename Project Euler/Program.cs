@@ -11,7 +11,7 @@ namespace ProjectEuler
             var programActive = true;
             var chosenProblem = 0;
             const int numberOfProblems = 806;
-            const string sol = "Solution for problem:";
+            
             while (programActive)
             {
                 var probNumBool = true;
@@ -55,18 +55,7 @@ namespace ProjectEuler
                     Console.WriteLine("Efficiency test was performed succesfully!");
                     continue;
                 }
-
-                Console.WriteLine(UsefulTools.ProblemText(chosenProblem));
-                Console.WriteLine(sol);
-
-                var stopwatch = new Stopwatch();
-
-                stopwatch.Start();
-                ProblemsSolved.ChosenProblem(chosenProblem, true);
-                stopwatch.Stop();
-
-                var ts = stopwatch.Elapsed;
-                Console.WriteLine(UsefulTools.TimeConversion(ts));
+                ProblemsSolved.ChosenProblem(chosenProblem, true, true);
             }
         }
     }

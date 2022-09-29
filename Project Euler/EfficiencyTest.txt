@@ -1,25 +1,50 @@
-Problem 23 - 5595 miliseconds
-Problem 14 - 1969 miliseconds
-Problem 22 - 1600 miliseconds
-Problem 10 - 699 miliseconds
-Problem 8 - 266 miliseconds
-Problem 12 - 217 miliseconds
-Problem 13 - 102 miliseconds
-Problem 11 - 87 miliseconds
-Problem 16 - 11 miliseconds
-Problem 7 - 11 miliseconds
-Problem 21 - 9 miliseconds
-Problem 9 - 9 miliseconds
-Problem 3 - 9 miliseconds
-Problem 25 - 2 miliseconds
-Problem 18 - 2 miliseconds
-Problem 4 - 2 miliseconds
+Problem 23 - 9547 miliseconds
+Problem 14 - 3452 miliseconds
+Problem 22 - 2980 miliseconds
+Problem 10 - 1330 miliseconds
+Problem 8 - 638 miliseconds
+Problem 12 - 395 miliseconds
+Problem 27 - 260 miliseconds
+Problem 11 - 107 miliseconds
+Problem 13 - 87 miliseconds
+Problem 36 - 51 miliseconds
+Problem 7 - 25 miliseconds
+Problem 3 - 22 miliseconds
+Problem 16 - 18 miliseconds
+Problem 18 - 17 miliseconds
+Problem 9 - 17 miliseconds
+Problem 21 - 16 miliseconds
+Problem 25 - 10 miliseconds
+Problem 1 - 10 miliseconds
+Problem 4 - 6 miliseconds
+Problem 46 - 2 miliseconds
+Problem 17 - 2 miliseconds
+Problem 20 - 1 milisecond
+Problem 2 - 1 milisecond
+Problem 34 - less than one milisecond
+Problem 28 - less than one milisecond
 Problem 24 - less than one milisecond
-Problem 20 - less than one milisecond
 Problem 19 - less than one milisecond
-Problem 17 - less than one milisecond
 Problem 15 - less than one milisecond
 Problem 6 - less than one milisecond
 Problem 5 - less than one milisecond
-Problem 2 - less than one milisecond
-Problem 1 - less than one milisecond
+Problem 50 not solved yet
+Problem 49 not solved yet
+Problem 48 not solved yet
+Problem 47 not solved yet
+Problem 45 not solved yet
+Problem 44 not solved yet
+Problem 43 not solved yet
+Problem 42 not solved yet
+Problem 41 not solved yet
+Problem 40 not solved yet
+Problem 39 not solved yet
+Problem 38 not solved yet
+Problem 37 not solved yet
+Problem 35 not solved yet
+Problem 33 not solved yet
+Problem 32 not solved yet
+Problem 31 not solved yet
+Problem 30 not solved yet
+Problem 29 not solved yet
+Problem 26 not solved yet
