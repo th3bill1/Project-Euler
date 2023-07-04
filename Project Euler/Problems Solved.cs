@@ -696,6 +696,39 @@ namespace ProjectEuler
             if (_isShowingAnswer)
                 Console.WriteLine(answer);
         }
+        public static void Problem30()
+        {
+            int answer = 0;
+            int[] a = new int[10];
+            for (int i = 0; i < 10; i++) a[i] = (int) Math.Pow(i, 5);
+            for(int i = 2; i<999999; i++)
+            {
+                int k = i, l = 0;
+                while(k>0)
+                {
+                    l += a[k % 10];
+                    k /= 10;
+                }
+                if (l == i) answer += i;
+            }
+            if (_isShowingAnswer)
+                Console.WriteLine(answer);
+        }
+        /*public static void Problem35()
+        {
+            for(int i = 0; i<1000000; i++)
+            {
+                int num_of_digits = (int) Math.Ceiling(Math.Log10(i));
+                int[] digits = new int[num_of_digits];
+                int k = i;
+                for(int j = 0; j< num_of_digits; j++)
+                {
+                    digits[j] = k%10;
+                    k /= 10;
+                }
+
+            }
+        }*/
         public static void Problem36()
         {
             var answer = 0;
