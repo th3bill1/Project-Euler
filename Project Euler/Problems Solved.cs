@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 namespace ProjectEuler
@@ -15,7 +16,7 @@ namespace ProjectEuler
         private static bool _isShowingAnswer;
         const string sol = "Solution for problem:";
 
-        public static void ChosenProblem(int chosenProblemNumber, bool showAnswer, bool _isShowingTime)
+        public static bool ChosenProblem(int chosenProblemNumber, bool showAnswer, bool _isShowingTime)
         {
             var chosenProblemName = "Problem" + Convert.ToString(chosenProblemNumber);
             var type = typeof(ProblemsSolved);
@@ -34,7 +35,9 @@ namespace ProjectEuler
 
                 if (_isShowingTime) stopwatch.Start();
 
-                info.Invoke(null, null);
+                var answer = info.Invoke(null, null);
+                if (_isShowingAnswer)
+                    Console.WriteLine(answer);
 
                 if (_isShowingTime)
                 {
@@ -42,23 +45,33 @@ namespace ProjectEuler
                     var ts = stopwatch.Elapsed;
                     Console.WriteLine(UsefulTools.TimeConversion(ts));
                 }
+                return true;
             }
-            else if (_isShowingAnswer) Console.WriteLine("There is no solution for this problem avaliable!");
+            else if (_isShowingAnswer)
+            {
+                Console.WriteLine("There is no solution for this problem avaliable!");
+            }
+            return false;
+        }
+        public static bool DoesProblemExist(int problemNumber)
+        {
+            var chosenProblemName = "Problem" + Convert.ToString(problemNumber);
+            var type = typeof(ProblemsSolved);
+            return !(type.GetMethod(chosenProblemName) == null);
         }
 
-        public static void Problem1()
+        public static int Problem1()
         {
-            var answer = 0;
+            int answer = 0;
             for (var i = 1; i < 1000; i++)
             {
                 if (i % 3 == 0 | i % 5 == 0)
                     answer += i;
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer);
+            return answer;
         }
 
-        public static void Problem2()
+        public static int Problem2()
         {
             int fibb1 = 1, fibb2 = 2, answer = 0;
             while (fibb1 < 4000000 & fibb2 < 4000000)
@@ -70,11 +83,10 @@ namespace ProjectEuler
                     answer += fibb2;
                 fibb2 += fibb1;
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer);
+            return answer;
         }
 
-        public static void Problem3()
+        public static double Problem3()
         {
             const double num = 600851475143;
             double answer = 0;
@@ -84,23 +96,21 @@ namespace ProjectEuler
                 answer = i;
                 break;
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer);
+            return answer;
         }
 
-        public static void Problem4()
+        public static long Problem4()
         {
-            var answer4 = 0;
+            var answer = 0;
             for (var i = 999; i > 0; i--)
             {
                 for (var j = 999; j > 0; j--)
                 {
-                    if (i * j > answer4 && UsefulTools.IsPalindrome(i * j))
-                        answer4 = i * j;
+                    if (i * j > answer && UsefulTools.IsPalindrome(i * j))
+                        answer = i * j;
                 }
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer4);
+            return answer;
         }
 
         public static void Problem5()
@@ -115,7 +125,7 @@ namespace ProjectEuler
                 Console.WriteLine(answer5);
         }
 
-        public static void Problem6()
+        public static int Problem6()
         {
             int squareSum = 0, sumSquare = 0;
             for (var i = 1; i <= 100; i++)
@@ -129,32 +139,29 @@ namespace ProjectEuler
             }
 
             squareSum = Convert.ToInt32(Math.Pow(squareSum, 2));
-            var answer6 = squareSum - sumSquare;
+            int answer = squareSum - sumSquare;
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer6);
+            return answer;
         }
 
-        public static void Problem7()
+        public static int Problem7()
         {
-            int answer7 = 1, counter = 1;
+            int answer = 1, counter = 1;
             while (counter < 10001)
             {
-                answer7 += 2;
-                if (UsefulTools.IsPrime(answer7))
+                answer += 2;
+                if (UsefulTools.IsPrime(answer))
                 {
                     counter += 1;
                 }
             }
-
-            if (_isShowingAnswer)
-                Console.WriteLine(answer7);
+            return answer;
         }
 
         [Obsolete("Obsolete")]
-        public static void Problem8()
+        public static long Problem8()
         {
-            long answer8 = 0;
+            long answer = 0;
             var thousandDigitNumber = Regex.Replace(UsefulTools.ProblemText(8), "[^0-9]", "")[13..];
             thousandDigitNumber = thousandDigitNumber.Remove(thousandDigitNumber.Length - 4);
             var digits = new char[thousandDigitNumber.Length];
@@ -173,17 +180,16 @@ namespace ProjectEuler
                     multiply *= Convert.ToInt16(digits[i + j] - '0');
                 }
 
-                if (multiply > answer8)
-                    answer8 = multiply;
+                if (multiply > answer)
+                    answer = multiply;
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer8);
+            return answer;
         }
 
-        public static void Problem9()
+        public static long Problem9()
         {
-            var answer9 = 0;
+            long answer = 0;
             for (var i = 1; i < 500; i++)
             {
                 for (var j = 2; j < 500; j++)
@@ -191,33 +197,30 @@ namespace ProjectEuler
                     var k = 1000 - i - j;
                     if (Convert.ToInt32(Math.Pow(i, 2)) + Convert.ToInt32(Math.Pow(j, 2)) !=
                         Convert.ToInt32(Math.Pow(k, 2))) continue;
-                    answer9 = i * j * k;
+                    answer = i * j * k;
                     goto Answer9;
                 }
             }
-
         Answer9:
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer9);
+            return answer;
         }
-        public static void Problem10()
+        public static long Problem10()
         {
-            long answer10 = 0;
+            long answer = 0;
             for (var i = 1; i < 2000000; i++)
             {
                 if (UsefulTools.IsPrime(i))
                 {
-                    answer10 += i;
+                    answer += i;
                 }
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer10);
+            return answer;
         }
         [Obsolete("Obsolete")]
-        public static void Problem11()
+        public static long Problem11()
         {
-            long answer11 = 0;
+            long answer = 0;
             var twentyByTwenty = Regex.Replace(UsefulTools.ProblemText(11), "[^0-9]", "")[6..];
             twentyByTwenty = twentyByTwenty.Remove(twentyByTwenty.Length - 19);
             var numbers = new string[400];
@@ -247,16 +250,16 @@ namespace ProjectEuler
                     {
                         tempNum1 = numbersGrid[i, j] * numbersGrid[i + 1, j] * numbersGrid[i + 2, j] *
                                    numbersGrid[i + 3, j];
-                        if (tempNum1 > answer11)
-                            answer11 = tempNum1;
+                        if (tempNum1 > answer)
+                            answer = tempNum1;
                     }
 
                     if (j < 17)
                     {
                         tempNum1 = numbersGrid[i, j] * numbersGrid[i, j + 1] * numbersGrid[i, j + 2] *
                                    numbersGrid[i, j + 3];
-                        if (tempNum1 > answer11)
-                            answer11 = tempNum1;
+                        if (tempNum1 > answer)
+                            answer = tempNum1;
                     }
 
                     if (i < 17 && j < 17)
@@ -264,8 +267,8 @@ namespace ProjectEuler
                         tempNum1 = numbersGrid[i, j] * numbersGrid[i + 1, j + 1] *
                                    numbersGrid[i + 2, j + 2] *
                                    numbersGrid[i + 3, j + 3];
-                        if (tempNum1 > answer11)
-                            answer11 = tempNum1;
+                        if (tempNum1 > answer)
+                            answer = tempNum1;
                     }
 
                     if (i < 17 && j > 2)
@@ -273,38 +276,36 @@ namespace ProjectEuler
                         tempNum1 = numbersGrid[i, j] * numbersGrid[i + 1, j - 1] *
                                    numbersGrid[i + 2, j - 2] *
                                    numbersGrid[i + 3, j - 3];
-                        if (tempNum1 > answer11)
-                            answer11 = tempNum1;
+                        if (tempNum1 > answer)
+                            answer = tempNum1;
                     }
                 }
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer11);
+            return answer;
         }
-        public static void Problem12()
+        public static int Problem12()
         {
-            int answer12 = 1, noTh = 2;
+            int answer = 1, noTh = 2;
             while (true)
             {
-                if (UsefulTools.NumberOfDivisors(answer12) >= 500)
+                if (UsefulTools.NumberOfDivisors(answer) >= 500)
                     break;
-                answer12 += noTh;
+                answer += noTh;
                 noTh += 1;
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer12);
+            return answer;
         }
         [Obsolete("Obsolete")]
-        public static void Problem13()
+        public static long Problem13()
         {
             var oneHundredNumbers = UsefulTools.ProblemText(13);
             var strippedNumbers = Regex.Replace(oneHundredNumbers, "[^0-9]", "");
             strippedNumbers = strippedNumbers[4..];
             var currentDigit = 49;
             double digitsSum = 0, helper = 0;
-            long answer13 = 0;
+            long answer = 0;
             for (var i = 0; i < 50; i++)
             {
                 for (var j = 0; j < 100; j++)
@@ -314,7 +315,7 @@ namespace ProjectEuler
 
                 if (i > 39)
                 {
-                    answer13 += Convert.ToInt64((digitsSum - Math.Truncate(digitsSum / 10) * 10) *
+                    answer += Convert.ToInt64((digitsSum - Math.Truncate(digitsSum / 10) * 10) *
                                                 Math.Pow(10, helper));
                     helper += 1;
                 }
@@ -323,14 +324,14 @@ namespace ProjectEuler
                 currentDigit -= 1;
             }
 
-            answer13 += Convert.ToInt64(digitsSum * Math.Pow(10, helper));
-            answer13 = Convert.ToInt64(answer13.ToString()[..10]);
-            if (_isShowingAnswer)
-                Console.WriteLine(answer13);
+            answer += Convert.ToInt64(digitsSum * Math.Pow(10, helper));
+            answer = Convert.ToInt64(answer.ToString()[..10]);
+
+            return answer;
         }
-        public static void Problem14()
+        public static long Problem14()
         {
-            long answer14 = 0, tempmax = 0;
+            long answer = 0, tempmax = 0;
             for (var i = 1; i < 1000000; i++)
             {
                 var chainLength = 0;
@@ -351,20 +352,18 @@ namespace ProjectEuler
 
                 if (chainLength <= tempmax) continue;
                 tempmax = chainLength;
-                answer14 = i;
+                answer = i;
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer14);
+            return answer;
         }
-        public static void Problem15()
+        public static long Problem15()
         {
-            if (_isShowingAnswer) 
-                Console.WriteLine(UsefulTools.BinomialCooficient(40, 20));
+            return UsefulTools.BinomialCooficient(40, 20);
         }
-        public static void Problem16()
+        public static long Problem16()
         {
-            var answer16 = 0;
+            long answer = 0;
             double tempTwoPowers = 0;
             var twoPowersDigits = new int[303];
             twoPowersDigits[0] = 2;
@@ -381,25 +380,23 @@ namespace ProjectEuler
 
             for (var i = 0; i < 303; i++)
             {
-                answer16 += twoPowersDigits[i];
+                answer += twoPowersDigits[i];
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer16);
+            return answer;
         }
-        public static void Problem17()
+        public static int Problem17()
         {
-            var answer17 = 0;
+            int answer = 0;
             for (var i = 1; i <= 1000; i++)
             {
                 var numberInWords = UsefulTools.NumberToWords(i).Replace(" ", "");
-                answer17 += numberInWords.Length;
+                answer += numberInWords.Length;
             }
 
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer17);
+            return answer;
         }
-        public static void Problem18()
+        public static string Problem18()
         {
             int linesNumber = 0, triangularCounter1 = 0;
             using (var sr = new StreamReader(_path))
@@ -442,27 +439,24 @@ namespace ProjectEuler
                 }
             }
 
-            if (_isShowingAnswer) 
-                Console.WriteLine(triangleTable[0, 0]);
-
-            
+           return triangleTable[0, 0];      
         }
-        public static void Problem19()
+        public static int Problem19()
         {
-            int dayOfWeek = 11, answer19 = 0;
+            int dayOfWeek = 11, answer = 0;
             for (var i = 1901; i < 2001; i++)
             {
                 if ((dayOfWeek + 4) % 7 == 0 | (dayOfWeek + 3) % 7 == 0 | (dayOfWeek + 1) % 7 == 0)
                 {
-                    answer19 += 2;
+                    answer += 2;
                 }
-                else answer19 += 1;
+                else answer += 1;
 
                 if (i % 4 == 0)
                 {
                     if (dayOfWeek % 7 == 0 | (dayOfWeek + 4) % 7 == 0)
                     {
-                        answer19 += 1;
+                        answer += 1;
                     }
                 }
 
@@ -470,7 +464,7 @@ namespace ProjectEuler
                 {
                     if ((dayOfWeek + 1) % 7 == 0 | (dayOfWeek + 5) % 7 == 0)
                     {
-                        answer19 += 1;
+                        answer += 1;
                     }
                 }
 
@@ -483,12 +477,11 @@ namespace ProjectEuler
                 dayOfWeek += 1;
             }
 
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer19);
+            return answer;
         }
-        public static void Problem20()
+        public static int Problem20()
         {
-            var answer20 = 0;
+            var answer = 0;
             double tempFactorial = 0;
             var factorial = new int[159];
             factorial[0] = 1;
@@ -505,26 +498,24 @@ namespace ProjectEuler
 
             for (var i = 0; i < 159; i++)
             {
-                answer20 += factorial[i];
+                answer += factorial[i];
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer20);
+            return answer;
         }
-        public static void Problem21()
+        public static int Problem21()
         {
-            var answer21 = 0;
+            int answer = 0;
             for (var i = 1; i < 10000; i++)
             {
                 if (UsefulTools.SumOfProperDivisors(i) != i &&
                     UsefulTools.SumOfProperDivisors(UsefulTools.SumOfProperDivisors(i)) == i)
-                    answer21 += i;
+                    answer += i;
             }
 
-            if (_isShowingAnswer)
-                Console.WriteLine(answer21);
+            return answer;
         }
-        public static void Problem22()
+        public static int Problem22()
         {
             string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string allNames, currName = "", tempName;
@@ -577,7 +568,7 @@ namespace ProjectEuler
                     }
                 }
             }
-            int answer22 = 0;
+            int answer = 0;
             for (int x = 0; x< n;x++)
             {
                 tempSum = 0;
@@ -585,16 +576,13 @@ namespace ProjectEuler
                 {
                     tempSum+=alphabet.IndexOf(names[x][z])+1;
                 }
-                answer22 += tempSum*(x+1);
+                answer += tempSum*(x+1);
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer22);
-
-
+            return answer;
         }
-        public static void Problem23()
+        public static long Problem23()
         {
-            long answer23 = 0;
+            long answer = 0;
 
             bool IsAbundant(int x)
             {
@@ -613,16 +601,15 @@ namespace ProjectEuler
 
             for (var i = 1; i < 28124; i++)
             {
-                if (!CanBeWrittenAsSumOfAbundant(i)) answer23 += i;
+                if (!CanBeWrittenAsSumOfAbundant(i)) answer += i;
             }
 
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer23);
+            return answer;
         }
-        public static void Problem24()
+        public static string Problem24()
         {
             var milion = 1000000;
-            string digitsS = "0123456789", answer24 = "";
+            string digitsS = "0123456789", answer = "";
             for (var i = 0; i < 10; i++)
             {
                 var max = 0;
@@ -633,14 +620,13 @@ namespace ProjectEuler
                         max = j;
                     }
                 }
-                answer24 += digitsS[max];
+                answer += digitsS[max];
                 digitsS = digitsS.Remove(max, 1);
                 milion -= UsefulTools.Factorial(10 - (i + 1)) * max;
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer24);
+            return answer;
         }
-        public static void Problem25()
+        public static BigInteger Problem25()
         {
             double fibbLength = 0;
             var indexFibb = 2;
@@ -653,13 +639,12 @@ namespace ProjectEuler
                 indexFibb += 2;
             }
 
-            BigInteger answer25 = BigInteger.Log10(currentFibb2) + 1 >= 1000 ? indexFibb - 1 : indexFibb;
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer25);
+            BigInteger answer = BigInteger.Log10(currentFibb2) + 1 >= 1000 ? indexFibb - 1 : indexFibb;
+            return answer;
         }
-        public static void Problem27()
+        public static int Problem27()
         {
-            int answer27 = 0, y = 0;
+            int answer = 0, y = 0;
             for (var a = -999; a < 1000; a++)
             {
                 for (var b = -999; b < 1000; b++)
@@ -673,14 +658,13 @@ namespace ProjectEuler
                     if (x > y)
                     {
                         y = x;
-                        answer27 = a * b;
+                        answer = a * b;
                     }
                 }
             }
-            if (_isShowingAnswer) 
-                Console.WriteLine(answer27);
+            return answer;
         }
-        public static void Problem28()
+        public static int Problem28()
         {
             int max = 1001*1001, answer = 0, addition = 2, tempnum = 1;
             while (tempnum<=max)
@@ -693,10 +677,21 @@ namespace ProjectEuler
                 }
                 addition += 2;
             }
-            if (_isShowingAnswer)
-                Console.WriteLine(answer);
+            return answer;
         }
-        public static void Problem30()
+        public static int Problem29()
+        {
+            List<double> values = new();
+            for(int a = 2; a<=100; a++)
+            {
+                for (int b = 2; b <= 100; b++)
+                {
+                    values.Add(Math.Pow(a,b));
+                }
+            }
+            return values.Distinct().Count();  
+        }
+        public static int Problem30()
         {
             int answer = 0;
             int[] a = new int[10];
@@ -711,25 +706,25 @@ namespace ProjectEuler
                 }
                 if (l == i) answer += i;
             }
-            if (_isShowingAnswer)
-                Console.WriteLine(answer);
+            return answer;
         }
-        /*public static void Problem35()
+        public static int Problem34()
         {
-            for(int i = 0; i<1000000; i++)
+            int answer = 0, sum;
+            for(int i = 10; i<600000; i++) 
             {
-                int num_of_digits = (int) Math.Ceiling(Math.Log10(i));
-                int[] digits = new int[num_of_digits];
-                int k = i;
-                for(int j = 0; j< num_of_digits; j++)
+                sum = 0;
+                int j = i;
+                while(j>0)
                 {
-                    digits[j] = k%10;
-                    k /= 10;
+                    sum += UsefulTools.Factorial(j % 10);
+                    j /= 10;
                 }
-
+                if (sum == i) answer += i;
             }
-        }*/
-        public static void Problem36()
+            return answer;
+        }
+        public static int Problem36()
         {
             var answer = 0;
             for (int i = 1; i<1000000; i++)
@@ -737,10 +732,65 @@ namespace ProjectEuler
                 if (i % 10 == 0 | i % 2 == 0) continue;
                 if (UsefulTools.IsPalindrome(i) && UsefulTools.IsPalindromeString(Convert.ToString(i, 2))) answer += i;
             }
-            if (_isShowingAnswer)
-                Console.WriteLine(answer);
+            return answer;
         }
-        public static void Problem46()
+        public static int Problem39()
+        {
+            static bool IsRightTriangle(int a, int b, int c)
+            {
+                if (Math.Pow(a, 2) + Math.Pow(b, 2) == Math.Pow(c, 2)) return true;
+                return false;
+            }
+            int answer = 0, value = 0;
+            for (int i = 1; i<=1000; i++)
+            {
+                int temp_value = 0;
+                for(int a = 1; a<i/2; a++)
+                {
+                    for(int b = 1; b<i/2; b++)
+                    {
+                        int c = i - (a + b);
+                        if (a >= b && a >= c && IsRightTriangle(b, c, a)) temp_value++;
+                        if (b >= a && b >= c && IsRightTriangle(a, c, b)) temp_value++;
+                        if (c >= b && c >= a && IsRightTriangle(b, a, c)) temp_value++;
+                    }
+                }
+                if (temp_value > value)
+                {
+                    value = temp_value;
+                    answer = i;
+                }
+            }
+            return answer;
+        }
+        public static int Problem42()
+        {
+            static bool IsTriangular(int i)
+            {
+                for(int j = 1; j<2*i; j++)
+                {
+                    if (j*(j+1) == 2*i) return true;
+                }
+                return false;
+            }
+            string text;
+            using (StreamReader sr = new(_path))
+            {
+                text = sr.ReadToEnd();
+            }
+            int value = 0, answer = 0;
+            foreach (char c in text)
+            {
+                if (c == '"' && value > 0)
+                {
+                    if(IsTriangular(value))answer++;
+                    value = 0;      
+                }
+                else if (Char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
+            }
+            return answer;
+        }
+        public static int Problem46()
         {
             bool a = true;
             int answer = 3;
@@ -758,23 +808,11 @@ namespace ProjectEuler
                 NextNum:
                 answer++;
             }
-            if (_isShowingAnswer)
-               Console.WriteLine(answer-1);
+            return answer - 1;
         }
-        public static void Problem67()
+        public static string Problem67()
         {
-            Problem18();
+            return Problem18();
         }
-        public static void Problem2137()
-        {
-            Console.WriteLine("Karzel ded");
-            var p = new Process
-            {
-                StartInfo = new ProcessStartInfo($@"{Environment.CurrentDirectory}..\..\..\..\gnome-bonk.gif")
-                { UseShellExecute = true }
-            };
-            p.Start();
-        }
-       
     }
 }
