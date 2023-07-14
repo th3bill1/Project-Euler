@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -240,6 +241,40 @@ namespace ProjectEuler
                 if (x[i] != x[x.Length - i-1]) return false;
             }
             return true;
+        }
+        public static void WriteOutSolved()
+        {
+            Console.WriteLine("Wait while the problems are being checked...");
+            int howmany = 0;
+            for (int i = 0; i<300; i++)
+            {
+                if(ProblemsSolved.DoesProblemExist(i)) howmany++;
+            }
+            int[] solved = new int[howmany];
+            int index = 0;
+            for (int i = 1; i<300; i++)
+            {
+                if (ProblemsSolved.DoesProblemExist(i)) solved[index++] = i;
+            }
+            Console.Write($"\n\nThere are {howmany} problems solved: ");
+            int x = 0;
+            for (int i = 0; i<howmany; i++)
+            {
+                if (i != howmany-1 && (solved[i + 1] == solved[i] + 1))
+                {
+                    if (x == 0)
+                    {
+                        Console.Write($"{solved[i]}-");
+                        x = 1;
+                    }
+                }
+                else if (i != howmany-1)
+                {
+                    Console.Write($"{solved[i]},");
+                    x = 0;
+                }
+                else Console.Write($"{solved[i]}\n\n");
+            }
         }
     }
 }

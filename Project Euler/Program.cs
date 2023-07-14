@@ -20,11 +20,12 @@ namespace ProjectEuler
                     Console.WriteLine("\n(If you want to leave put 0):");
                     Console.WriteLine("\n(If you want to perform efficiency test put 1001):");
                     Console.WriteLine("\n(If you want to perform efficiency test and save data to file put 2002):");
+                    Console.WriteLine("\n(If you want to write out avaliable problems put 3003):");
                     Console.WriteLine("\nPut the number of problem to see its answer or action you want to perform:");
                     var choice = Console.ReadLine();
                     if (int.TryParse(choice, out var intChoice))
                     {
-                        if (intChoice <= numberOfProblems & intChoice >= 0 | intChoice == 2137 | intChoice == 1001 | intChoice == 2002)
+                        if (intChoice <= numberOfProblems & intChoice >= 0 | intChoice == 1001 | intChoice == 2002 | intChoice == 3003)
                         {
                             chosenProblem = intChoice;
                             probNumBool = false;
@@ -54,6 +55,10 @@ namespace ProjectEuler
                     UsefulTools.EfficiencyTestToFile(howManyToCheck2);
                     Console.WriteLine("Efficiency test was performed succesfully!");
                     continue;
+                }
+                if(chosenProblem == 3003)
+                {
+                    UsefulTools.WriteOutSolved();
                 }
                 ProblemsSolved.ChosenProblem(chosenProblem, true, true);
             }
