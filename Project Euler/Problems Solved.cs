@@ -657,30 +657,6 @@ namespace ProjectEuler
             if (_isShowingAnswer) 
                 Console.WriteLine(answer25);
         }
-        public static void Problem26()
-        {
-            int CycleLength(int b)
-            {
-                int i = 2;
-                int a = 10;
-                do
-                {
-                    a = a * 10 % b;
-                    i++;
-                } while (a != 1);
-                return i;
-            }
-
-            int answer = 2;
-            for (int i = 6; i<1000; i++) 
-            {
-                if (!UsefulTools.IsPrime(i)) continue;
-                int a = CycleLength(i);
-                if (a > answer) answer = a;
-            }
-            if (_isShowingAnswer)
-                Console.WriteLine(answer);
-        }
         public static void Problem27()
         {
             int answer27 = 0, y = 0;
@@ -765,22 +741,6 @@ namespace ProjectEuler
                 { UseShellExecute = true }
             };
             p.Start();
-        }
-
-        public static void Problem130()
-        {
-            double sum = 0;
-            for(int k = 1; k<100; k++)
-            {
-                for(int p = 3; p < 3000; p++)
-                {
-                    if (UsefulTools.IsPrime(p)) sum += Math.Sin(Math.Pow(p, k) * Math.PI / 2) / (Math.Pow(p, k)) / k;
-                }
-
-            }
-            double exp = Math.Log(Math.PI / 4);
-            Console.WriteLine(exp);
-            Console.WriteLine(sum);
         }
        
     }
