@@ -10,7 +10,7 @@ namespace ProjectEuler
         {
             var programActive = true;
             var chosenProblem = 0;
-            const int numberOfProblems = 806;
+            const int numberOfProblems = 851;
             
             while (programActive)
             {

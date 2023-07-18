@@ -10,11 +10,15 @@ namespace ProjectEuler
 {
     public static class UsefulTools
     {
-        public static string ProblemText(int problemNumber)
+        public static string HTMLText(int problemNumber)
         {
             var wc = new WebClient();
             var raw = wc.DownloadData($"https://projecteuler.net/problem={problemNumber}");
-            var webData = System.Text.Encoding.UTF8.GetString(raw);
+            return System.Text.Encoding.UTF8.GetString(raw);
+        }
+        public static string ProblemText(int problemNumber)
+        {
+           
             static string HtmlToPlainText(string html)
             {
                 const string tagWhiteSpace = @"(>|$)(\W|\n|\r)+<";
@@ -30,7 +34,7 @@ namespace ProjectEuler
                 text = stripFormattingRegex.Replace(text, string.Empty);
                 return text;
             }
-            var pureText = HtmlToPlainText(webData);
+            var pureText = HtmlToPlainText(HTMLText(problemNumber));
             var startingText = $"Problem {problemNumber}";
             var startIndex = pureText.IndexOf(startingText, StringComparison.Ordinal);
             var endIndex = pureText.IndexOf("Project Euler:", StringComparison.Ordinal);
@@ -38,7 +42,6 @@ namespace ProjectEuler
             var problemText = pureText.Substring(startIndex + startingLength, endIndex - startIndex - startingLength - 3);
             return ($"\nProblem number {problemNumber}:\n{problemText}");
         }
-
         public static long BinomialCooficient(long top, long bottom)
         {
             long answer = 1;
@@ -160,7 +163,9 @@ namespace ProjectEuler
             {
                 if (!num.Contains((i + 1).ToString())) return false;
             }
-            public static int[] Factors(int x)
+            return true;
+        }
+        public static int[] Prime_factors(int x)
         {
             if (x <= 0) return null;
             if (x == 1)
@@ -169,22 +174,24 @@ namespace ProjectEuler
                 return result;
             }
             List<int> list = new();
-            for (int i = 1; i < x; i++)
+            if (x % 2 == 0)
             {
-                if (x % i == 0) list.Add(i);
+                list.Add(2);
+                while ( x % 2 == 0 ) 
+                {
+                    x /= 2;
+                }
             }
-            int[] factors = list.ToArray();
-            return factors;
-        }
-        public static int[] Prime_factors(int x)
-        {
-            int[] factors = Factors(x);
-            List<int> list = new();
-            foreach (int i in factors)
+            for (int i = 3; i <= Math.Sqrt(x); i += 2)
             {
-                if (IsPrime(i)) list.Append(i);
+                while (x % i == 0)
+                {
+                    list.Add(i);
+                    x /= i;
+                }
             }
-            return list.ToArray();
+            if (x > 2) list.Add(x);
+            return list.Distinct().ToArray();
         }
 
         private static long[,] EfficiencyTest(int numberOfProblems)

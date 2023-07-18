@@ -973,21 +973,14 @@ namespace ProjectEuler
         }
         public static int Problem47()
         {
-            static int DstPrmFctNmLT4(int n)
+            static int PrmFacNum(int num)
             {
-                int[] factors = UsefulTools.Prime_factors(n);
-                int num = 0;
-                foreach (int i in factors)
-                {
-                    if (UsefulTools.IsPrime(i)) num++;
-                    if (num > 4) break;
-                }
-                return num;
+                return UsefulTools.Prime_factors(num).Length;
             }
             int i = 2;
             while (true)
             {
-                if (DstPrmFctNmLT4(i) == 3 && DstPrmFctNmLT4(i+1) == 3 && DstPrmFctNmLT4(i+2) == 3)
+                if (PrmFacNum(i) == 4 && PrmFacNum(i+1) == 4 && PrmFacNum(i + 2) == 4 && PrmFacNum(i + 3) == 4)
                 {
                     return i;
                 }
@@ -997,6 +990,23 @@ namespace ProjectEuler
         public static string Problem67()
         {
             return Problem18();
+        }
+        public static string Problem836()
+        {
+            string text = UsefulTools.HTMLText(836);
+            string answer = "";
+            bool isbold = false;
+            for (int i = 0; i< text.Length; i++)
+            {
+                if (text[i] == '<' && text[i + 1] == 'b' && text[i + 2] == '>')
+                {
+                    answer += text[i + 3];
+                    isbold = true;
+                }
+                if(isbold && text[i] == ' ') answer += text[i + 1];
+                if (text[i] == '<' && text[i + 1] == '/' && text[i + 2] == 'b' && text[i + 3] == '>') isbold = false;
+            }
+            return answer;
         }
     }
 }
