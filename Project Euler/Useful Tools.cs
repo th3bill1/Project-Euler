@@ -149,6 +149,17 @@ namespace ProjectEuler
             }
             return x;
         }
+        public static bool IsPandigital(int number)
+        {
+            int size = (int)Math.Floor(Math.Log10(number)+1);
+            if (size > 9) return false;
+            string num = number.ToString();
+            for(int  i = 0; i < size; i++)
+            {
+                if (!num.Contains((i + 1).ToString()))return false;
+            }
+            return true;
+        }
         private static long[,] EfficiencyTest(int numberOfProblems)
         {
             var allTimes = new long[numberOfProblems, 2];

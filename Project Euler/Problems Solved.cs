@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
@@ -708,6 +709,56 @@ namespace ProjectEuler
             }
             return answer;
         }
+        public static int Problem31()
+        {
+            int answer = 0;
+           
+            for (int a = 0; a<2; a++)
+            {
+                for (int b = 0; b < 3; b++)
+                {
+                    for (int c = 0; c < 5; c++)
+                    {
+                        for (int d = 0; d < 11; d++)
+                        {
+                            for (int e = 0; e < 21; e++)
+                            {
+                                for (int f = 0; f < 41; f++)
+                                {
+                                    for (int g = 0; g < 101; g++)
+                                    {
+                                        for (int h = 0; h < 201; h++)
+                                        {
+                                            int x = a * 200 + b * 100 + c * 50 + d * 20 + e * 10 + f * 5 + g * 2 + h;
+                                            if (x > 200) break;
+                                            if ( x == 200) answer++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return answer;
+        }
+        public static int Problem32()
+        {
+            int answer = 0;
+            List<int> list = new List<int>();
+            for(int i = 2; i<5001; i++)
+            {
+                for(int j = 2; j<5001; j++)
+                {
+                    int k = i * j;
+                    string num = i.ToString() + j.ToString() + (k).ToString();
+                    if (num.Length != 9) continue;
+                    if (UsefulTools.IsPandigital(Convert.ToInt32(num))) list.Add(k);
+                }
+            }
+            foreach (int i in list.Distinct()) answer += i;
+            return answer;
+        }
         public static int Problem34()
         {
             int answer = 0, sum;
@@ -731,6 +782,53 @@ namespace ProjectEuler
             {
                 if (i % 10 == 0 | i % 2 == 0) continue;
                 if (UsefulTools.IsPalindrome(i) && UsefulTools.IsPalindromeString(Convert.ToString(i, 2))) answer += i;
+            }
+            return answer;
+        }
+        public static int Problem37()
+        {
+            int answer = 0;
+            for (int i = 10,j = 0; j<11; i++)
+            {
+                if(UsefulTools.IsPrime(i))
+                {
+                    int k = i, l = 1;
+                    while (k>0)
+                    {
+                        k /= 10;
+                        int m = i - (int)(k * Math.Pow(10, l));
+                        if (!(UsefulTools.IsPrime(k) && UsefulTools.IsPrime(m))) break;
+                        l++;
+                    }
+                    if (l == Math.Floor(Math.Log10(i)+1))
+                    {
+                        answer += i;
+                        j++;
+                    }
+                } 
+            }
+            return answer;
+        }
+        public static int Problem38()
+        {
+            int answer = 0;
+            static int ToPandigital_maxsize9(int number, int max_multiple)
+            {
+                string temp = "";
+                for(int i = 0; i < max_multiple; i++)
+                {
+                    temp += (number * (i + 1)).ToString();
+                }
+                if (temp.Length > 9 || !UsefulTools.IsPandigital(Convert.ToInt32(temp))) return 0;
+                return Convert.ToInt32(temp);
+            }
+            for(int i = 2; i< 20;i++)
+            {
+                for(int j = 1; j < 50000; j++)
+                {
+                    int k = ToPandigital_maxsize9(j, i);
+                    if(k>answer) answer = k;
+                }
             }
             return answer;
         }
