@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -124,7 +125,7 @@ namespace ProjectEuler
             return words;
         }
 
-        private static int Gcf(int a, int b)
+        public static int Gcf(int a, int b)
         {
             while (b != 0)
             {
@@ -148,6 +149,32 @@ namespace ProjectEuler
                 x *= i;
             }
             return x;
+        }
+        public static int[] Factors(int x)
+        {
+            if (x <= 0) return null;
+            if (x == 1)
+            {
+                int[] result = { 1 };
+                return result;
+            }
+            List<int> list = new();
+            for(int i = 1; i< x; i++)
+            {
+                if(x % i == 0) list.Add(i);
+            }
+            int[] factors = list.ToArray();
+            return factors;
+        }
+        public static int[] Prime_factors(int x)
+        {
+            int[] factors = Factors(x);
+            List<int> list = new();
+            foreach (int i in factors)
+            {
+                if (IsPrime(i)) list.Append(i);
+            }
+            return list.ToArray();
         }
         private static long[,] EfficiencyTest(int numberOfProblems)
         {
