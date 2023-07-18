@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -124,7 +125,7 @@ namespace ProjectEuler
             return words;
         }
 
-        private static int Gcf(int a, int b)
+        public static int Gcf(int a, int b)
         {
             while (b != 0)
             {
@@ -149,17 +150,43 @@ namespace ProjectEuler
             }
             return x;
         }
+
         public static bool IsPandigital(int number)
         {
-            int size = (int)Math.Floor(Math.Log10(number)+1);
+            int size = (int)Math.Floor(Math.Log10(number) + 1);
             if (size > 9) return false;
             string num = number.ToString();
-            for(int  i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                if (!num.Contains((i + 1).ToString()))return false;
+                if (!num.Contains((i + 1).ToString())) return false;
             }
-            return true;
+            public static int[] Factors(int x)
+        {
+            if (x <= 0) return null;
+            if (x == 1)
+            {
+                int[] result = { 1 };
+                return result;
+            }
+            List<int> list = new();
+            for (int i = 1; i < x; i++)
+            {
+                if (x % i == 0) list.Add(i);
+            }
+            int[] factors = list.ToArray();
+            return factors;
         }
+        public static int[] Prime_factors(int x)
+        {
+            int[] factors = Factors(x);
+            List<int> list = new();
+            foreach (int i in factors)
+            {
+                if (IsPrime(i)) list.Append(i);
+            }
+            return list.ToArray();
+        }
+
         private static long[,] EfficiencyTest(int numberOfProblems)
         {
             var allTimes = new long[numberOfProblems, 2];

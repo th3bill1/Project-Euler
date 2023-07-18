@@ -759,6 +759,35 @@ namespace ProjectEuler
             foreach (int i in list.Distinct()) answer += i;
             return answer;
         }
+        public static int Problem33()
+        {
+            int  num = 0;
+            int[,] fractions = new int[4, 2];
+            for(double a = 1; a<10; a++)
+            {
+                for(double b = 1; b<10; b++)
+                {
+                    for(double c = 1; c<10; c++)
+                    {
+                        for(double d = 1;  d<10; d++)
+                        {
+                            double e = (10 * a + b) / (10 * c + d);
+                            if (e<1 && ((e == a / c && b == d)|| (e == a / d && b == c)|| (e == b / c && a == d)|| (e == b / d && a == c)))
+                            {
+
+                                fractions[num, 0] = (int)(10 * a + b);
+                                fractions[num, 1] = (int)(10 * c + d);
+                                num++;
+                            }
+                        }
+                    }
+                }
+            }
+            int numerator = fractions[0, 0] * fractions[1, 0] * fractions[2, 0] * fractions[3, 0];
+            int denominator = fractions[0, 1] * fractions[1, 1] * fractions[2, 1] * fractions[3, 1];
+            denominator /= UsefulTools.Gcf(numerator, denominator);
+            return denominator;
+        }
         public static int Problem34()
         {
             int answer = 0, sum;
@@ -772,6 +801,28 @@ namespace ProjectEuler
                     j /= 10;
                 }
                 if (sum == i) answer += i;
+            }
+            return answer;
+        }
+        public static int Problem35() 
+        {
+            int answer = 0;
+            for(int i = 2; i<1000000; i++)
+            {
+                if(UsefulTools.IsPrime(i))
+                {
+                    bool is_prime = true;
+                    int num_of_digits = (int)Math.Floor(Math.Log10(i) + 1);
+                    int j = i;
+                    do
+                    {
+                        int k = j % 10;
+                        j /= 10;
+                        j += k * (int)Math.Pow(10, num_of_digits - 1);
+                        if (!UsefulTools.IsPrime(j)) is_prime = false;
+                     } while (j != i);
+                    if (is_prime) answer++;
+                }
             }
             return answer;
         }
@@ -861,6 +912,18 @@ namespace ProjectEuler
             }
             return answer;
         }
+        public static int Problem40()
+        {
+            int answer = 1, temp = 1;
+            string s = "0";
+            while (s.Length<1000001)
+            {
+                s += temp.ToString();
+                temp++;
+            }
+            answer *= (s[1] - 48) * (s[10] - 48) * (s[100] - 48) * (s[1000] - 48) * (s[10000] - 48) * (s[100000] - 48) * (s[1000000] - 48);
+            return answer;
+        }
         public static int Problem42()
         {
             static bool IsTriangular(int i)
@@ -907,6 +970,29 @@ namespace ProjectEuler
                 answer++;
             }
             return answer - 1;
+        }
+        public static int Problem47()
+        {
+            static int DstPrmFctNmLT4(int n)
+            {
+                int[] factors = UsefulTools.Prime_factors(n);
+                int num = 0;
+                foreach (int i in factors)
+                {
+                    if (UsefulTools.IsPrime(i)) num++;
+                    if (num > 4) break;
+                }
+                return num;
+            }
+            int i = 2;
+            while (true)
+            {
+                if (DstPrmFctNmLT4(i) == 3 && DstPrmFctNmLT4(i+1) == 3 && DstPrmFctNmLT4(i+2) == 3)
+                {
+                    return i;
+                }
+                i++;
+            }
         }
         public static string Problem67()
         {
