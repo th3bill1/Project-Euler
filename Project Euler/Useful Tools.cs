@@ -143,6 +143,27 @@ namespace ProjectEuler
         {
             return (a / Gcf(a, b)) * b;
         }
+        public static int[] DigitsOfNum(int num)
+        {
+            int[] digits = new int[(int)Math.Floor(Math.Log10(num) + 1)];
+            int i = 1;
+            while (num != 0)
+            {
+                digits[digits.Length - i] = num % 10;
+                i++;
+                num = num / 10;
+            }
+            return digits;
+        }
+        public static int DigitsToNum(int[] digits)
+        {
+            int num = 0;
+            for (int i = 0; i < digits.Length; i++)
+            {
+                num += digits[digits.Length - i - 1] * (int)Math.Pow(10, i);
+            }
+            return num;
+        }
 
         public static int Factorial(int x)
         {
