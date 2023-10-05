@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace ProjectEuler
@@ -90,6 +91,17 @@ namespace ProjectEuler
         public static bool IsPalindrome(int x)
         {
             long original = x, reverse = 0;
+            while (x != 0)
+            {
+                var rem = x % 10;
+                reverse = reverse * 10 + rem;
+                x /= 10;
+            }
+            return original == reverse;
+        }
+        public static bool IsPalindrome(BigInteger x)
+        {
+            BigInteger original = x, reverse = 0;
             while (x != 0)
             {
                 var rem = x % 10;
