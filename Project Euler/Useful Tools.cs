@@ -167,6 +167,18 @@ namespace ProjectEuler
             }
             return digits;
         }
+        public static bool IsPermutation(int x, int y)
+        {
+            int[] digitsX = DigitsOfNum(x);
+            int[] digitsY = DigitsOfNum(y);
+            if (digitsX.Length != digitsY.Length) return false;
+            for (int i = 0; i < digitsX.Length; i++)
+            {
+                if (!digitsY.Contains(digitsX[i])) return false;
+                if (!digitsX.Contains(digitsY[i])) return false;
+            }
+            return true;
+        }
         public static int DigitsToNum(int[] digits)
         {
             int num = 0;
@@ -283,6 +295,10 @@ namespace ProjectEuler
                         break;
                 }
             }
+        }
+        public static int NumOfDigits(int x)
+        {
+            return (int)Math.Floor(Math.Log10(x) + 1);
         }
 
         public static void EfficiencyTestTop(int numberOfProblems, int howManyTop)

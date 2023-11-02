@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -1002,6 +1003,21 @@ namespace ProjectEuler
                 }
                 i++;
             }
+        }
+        public static string Problem49()
+        {
+            string ans = "";
+            for(int i = 1000; i <= 9999; i++)
+            {
+                if(UsefulTools.IsPrime(i))
+                {
+                    for(int j = 1; j<8999; j++)
+                    {
+                        if (UsefulTools.IsPrime(i + j) && UsefulTools.IsPrime(i + 2 * j) && UsefulTools.IsPermutation(i, i + j) && UsefulTools.IsPermutation(i, i + 2 * j)) ans += i.ToString() + (i + j).ToString() + (i + 2 * j).ToString()+'\n';
+                    }
+                }
+            }
+            return ans;
         }
         public static int Problem51()
         {
