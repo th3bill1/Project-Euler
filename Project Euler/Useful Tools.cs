@@ -63,6 +63,15 @@ namespace ProjectEuler
             }
             return true;
         }
+        public static bool IsPrime(double x)
+        {
+            if (x < 2) return false;
+            for (var i = 2; i <= Math.Sqrt(x); i++)
+            {
+                if (x % i == 0) return false;
+            }
+            return true;
+        }
         public static int NumberOfDivisors(int x)
         {
             var divisorsNumber = 2;
@@ -167,6 +176,18 @@ namespace ProjectEuler
             }
             return digits;
         }
+        public static int[] DigitsOfNum(BigInteger num)
+        {
+            int[] digits = new int[(int)Math.Floor(BigInteger.Log10(num) + 1)];
+            int i = 1;
+            while (num != 0)
+            {
+                digits[digits.Length - i] = (int)(num % 10);
+                i++;
+                num = num / 10;
+            }
+            return digits;
+        }
         public static bool IsPermutation(int x, int y)
         {
             int[] digitsX = DigitsOfNum(x);
@@ -223,6 +244,34 @@ namespace ProjectEuler
             {
                 list.Add(2);
                 while ( x % 2 == 0 ) 
+                {
+                    x /= 2;
+                }
+            }
+            for (int i = 3; i <= Math.Sqrt(x); i += 2)
+            {
+                while (x % i == 0)
+                {
+                    list.Add(i);
+                    x /= i;
+                }
+            }
+            if (x > 2) list.Add(x);
+            return list.Distinct().ToArray();
+        }
+        public static double[] Prime_factors(double x)
+        {
+            if (x <= 0) return null;
+            if (x == 1)
+            {
+                double[] result = { 1 };
+                return result;
+            }
+            List<double> list = new();
+            if (x % 2 == 0)
+            {
+                list.Add(2);
+                while (x % 2 == 0)
                 {
                     x /= 2;
                 }

@@ -1019,6 +1019,29 @@ namespace ProjectEuler
             }
             return ans;
         }
+        public static void Problem50()
+        {
+            for (BigInteger i = 2; i < 300; i++)
+            {
+                for (BigInteger multiple = 1; multiple < 1000; multiple++)
+                {
+                    BigInteger num = multiple * i;
+                    int[] digits = UsefulTools.DigitsOfNum(num);
+                    int sum = 0;
+                    bool is_only_ones = true;
+                    foreach (int digit in digits)
+                    {
+                        if (digit != 1) is_only_ones = false;
+                        sum += digit;
+                    }
+                    if (sum == i && is_only_ones)
+                    {
+                        Console.WriteLine(i + ": " + num);
+                        break;
+                    }
+                }
+            }
+        }
         public static int Problem51()
         {
             
@@ -1121,6 +1144,24 @@ namespace ProjectEuler
         public static string Problem67()
         {
             return Problem18();
+        }
+        public static BigInteger Problem700()
+        {
+            BigInteger euler = 1504170715041707, temp = euler, num = 0;
+            BigInteger mod = 4503599627370517;
+            BigInteger sum = euler;
+            for(BigInteger i = 1; i<mod; i++)
+            {
+                num += euler;
+                if(num>mod) num%=mod;
+                if(num<temp)
+                {
+                    temp = num;
+                    sum += num;
+                    Console.WriteLine(num);
+                }
+            }
+            return sum;
         }
         public static string Problem836()
         {
