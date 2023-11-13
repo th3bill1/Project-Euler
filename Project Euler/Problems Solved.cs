@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -123,7 +124,7 @@ namespace ProjectEuler
                 answer5 = UsefulTools.Lcm(answer5, i);
             }
 
-            if (_isShowingAnswer) 
+            if (_isShowingAnswer)
                 Console.WriteLine(answer5);
         }
 
@@ -441,7 +442,7 @@ namespace ProjectEuler
                 }
             }
 
-           return triangleTable[0, 0];      
+            return triangleTable[0, 0];
         }
         public static int Problem19()
         {
@@ -529,12 +530,12 @@ namespace ProjectEuler
             }
             foreach (char c in allNames)
             {
-                if (c=='"')
+                if (c == '"')
                 {
                     _ = allNames.Remove(c);
                     continue;
                 }
-                if (c==',')
+                if (c == ',')
                 {
                     names.Add(currName);
                     currName = "";
@@ -546,19 +547,19 @@ namespace ProjectEuler
             int n = names.Count;
             for (int w = 0; w < n; w++)
             {
-                for (int x = 0; x < n-w-1; x++)
+                for (int x = 0; x < n - w - 1; x++)
                 {
                     y = 0;
                     while (true)
                     {
-                        if (y > names[x+1].Length - 1 && y <= names[x].Length - 1)
+                        if (y > names[x + 1].Length - 1 && y <= names[x].Length - 1)
                         {
                             tempName = names[x];
                             names[x] = names[x + 1];
                             names[x + 1] = tempName;
                             break;
                         }
-                        if (y > names[x].Length-1) break;
+                        if (y > names[x].Length - 1) break;
                         if (alphabet.IndexOf(names[x][y]) > alphabet.IndexOf(names[x + 1][y]))
                         {
                             tempName = names[x];
@@ -571,14 +572,14 @@ namespace ProjectEuler
                 }
             }
             int answer = 0;
-            for (int x = 0; x< n;x++)
+            for (int x = 0; x < n; x++)
             {
                 tempSum = 0;
-                for(int z = 0; z < names[x].Length;z++)
+                for (int z = 0; z < names[x].Length; z++)
                 {
-                    tempSum+=alphabet.IndexOf(names[x][z])+1;
+                    tempSum += alphabet.IndexOf(names[x][z]) + 1;
                 }
-                answer += tempSum*(x+1);
+                answer += tempSum * (x + 1);
             }
             return answer;
         }
@@ -668,10 +669,10 @@ namespace ProjectEuler
         }
         public static int Problem28()
         {
-            int max = 1001*1001, answer = 0, addition = 2, tempnum = 1;
-            while (tempnum<=max)
+            int max = 1001 * 1001, answer = 0, addition = 2, tempnum = 1;
+            while (tempnum <= max)
             {
-                for (int i = 1; i<5; i++)
+                for (int i = 1; i < 5; i++)
                 {
                     answer += tempnum;
                     tempnum += addition;
@@ -684,24 +685,24 @@ namespace ProjectEuler
         public static int Problem29()
         {
             List<double> values = new();
-            for(int a = 2; a<=100; a++)
+            for (int a = 2; a <= 100; a++)
             {
                 for (int b = 2; b <= 100; b++)
                 {
-                    values.Add(Math.Pow(a,b));
+                    values.Add(Math.Pow(a, b));
                 }
             }
-            return values.Distinct().Count();  
+            return values.Distinct().Count();
         }
         public static int Problem30()
         {
             int answer = 0;
             int[] a = new int[10];
-            for (int i = 0; i < 10; i++) a[i] = (int) Math.Pow(i, 5);
-            for(int i = 2; i<999999; i++)
+            for (int i = 0; i < 10; i++) a[i] = (int)Math.Pow(i, 5);
+            for (int i = 2; i < 999999; i++)
             {
                 int k = i, l = 0;
-                while(k>0)
+                while (k > 0)
                 {
                     l += a[k % 10];
                     k /= 10;
@@ -713,8 +714,8 @@ namespace ProjectEuler
         public static int Problem31()
         {
             int answer = 0;
-           
-            for (int a = 0; a<2; a++)
+
+            for (int a = 0; a < 2; a++)
             {
                 for (int b = 0; b < 3; b++)
                 {
@@ -732,7 +733,7 @@ namespace ProjectEuler
                                         {
                                             int x = a * 200 + b * 100 + c * 50 + d * 20 + e * 10 + f * 5 + g * 2 + h;
                                             if (x > 200) break;
-                                            if ( x == 200) answer++;
+                                            if (x == 200) answer++;
                                         }
                                     }
                                 }
@@ -747,9 +748,9 @@ namespace ProjectEuler
         {
             int answer = 0;
             List<int> list = new List<int>();
-            for(int i = 2; i<5001; i++)
+            for (int i = 2; i < 5001; i++)
             {
-                for(int j = 2; j<5001; j++)
+                for (int j = 2; j < 5001; j++)
                 {
                     int k = i * j;
                     string num = i.ToString() + j.ToString() + (k).ToString();
@@ -762,18 +763,18 @@ namespace ProjectEuler
         }
         public static int Problem33()
         {
-            int  num = 0;
+            int num = 0;
             int[,] fractions = new int[4, 2];
-            for(double a = 1; a<10; a++)
+            for (double a = 1; a < 10; a++)
             {
-                for(double b = 1; b<10; b++)
+                for (double b = 1; b < 10; b++)
                 {
-                    for(double c = 1; c<10; c++)
+                    for (double c = 1; c < 10; c++)
                     {
-                        for(double d = 1;  d<10; d++)
+                        for (double d = 1; d < 10; d++)
                         {
                             double e = (10 * a + b) / (10 * c + d);
-                            if (e<1 && ((e == a / c && b == d)|| (e == a / d && b == c)|| (e == b / c && a == d)|| (e == b / d && a == c)))
+                            if (e < 1 && ((e == a / c && b == d) || (e == a / d && b == c) || (e == b / c && a == d) || (e == b / d && a == c)))
                             {
 
                                 fractions[num, 0] = (int)(10 * a + b);
@@ -792,11 +793,11 @@ namespace ProjectEuler
         public static int Problem34()
         {
             int answer = 0, sum;
-            for(int i = 10; i<600000; i++) 
+            for (int i = 10; i < 600000; i++)
             {
                 sum = 0;
                 int j = i;
-                while(j>0)
+                while (j > 0)
                 {
                     sum += UsefulTools.Factorial(j % 10);
                     j /= 10;
@@ -805,12 +806,12 @@ namespace ProjectEuler
             }
             return answer;
         }
-        public static int Problem35() 
+        public static int Problem35()
         {
             int answer = 0;
-            for(int i = 2; i<1000000; i++)
+            for (int i = 2; i < 1000000; i++)
             {
-                if(UsefulTools.IsPrime(i))
+                if (UsefulTools.IsPrime(i))
                 {
                     bool is_prime = true;
                     int num_of_digits = (int)Math.Floor(Math.Log10(i) + 1);
@@ -821,7 +822,7 @@ namespace ProjectEuler
                         j /= 10;
                         j += k * (int)Math.Pow(10, num_of_digits - 1);
                         if (!UsefulTools.IsPrime(j)) is_prime = false;
-                     } while (j != i);
+                    } while (j != i);
                     if (is_prime) answer++;
                 }
             }
@@ -830,7 +831,7 @@ namespace ProjectEuler
         public static int Problem36()
         {
             var answer = 0;
-            for (int i = 1; i<1000000; i++)
+            for (int i = 1; i < 1000000; i++)
             {
                 if (i % 10 == 0 | i % 2 == 0) continue;
                 if (UsefulTools.IsPalindrome(i) && UsefulTools.IsPalindromeString(Convert.ToString(i, 2))) answer += i;
@@ -840,24 +841,24 @@ namespace ProjectEuler
         public static int Problem37()
         {
             int answer = 0;
-            for (int i = 10,j = 0; j<11; i++)
+            for (int i = 10, j = 0; j < 11; i++)
             {
-                if(UsefulTools.IsPrime(i))
+                if (UsefulTools.IsPrime(i))
                 {
                     int k = i, l = 1;
-                    while (k>0)
+                    while (k > 0)
                     {
                         k /= 10;
                         int m = i - (int)(k * Math.Pow(10, l));
                         if (!(UsefulTools.IsPrime(k) && UsefulTools.IsPrime(m))) break;
                         l++;
                     }
-                    if (l == Math.Floor(Math.Log10(i)+1))
+                    if (l == Math.Floor(Math.Log10(i) + 1))
                     {
                         answer += i;
                         j++;
                     }
-                } 
+                }
             }
             return answer;
         }
@@ -867,19 +868,19 @@ namespace ProjectEuler
             static int ToPandigital_maxsize9(int number, int max_multiple)
             {
                 string temp = "";
-                for(int i = 0; i < max_multiple; i++)
+                for (int i = 0; i < max_multiple; i++)
                 {
                     temp += (number * (i + 1)).ToString();
                 }
                 if (temp.Length > 9 || !UsefulTools.IsPandigital(Convert.ToInt32(temp))) return 0;
                 return Convert.ToInt32(temp);
             }
-            for(int i = 2; i< 20;i++)
+            for (int i = 2; i < 20; i++)
             {
-                for(int j = 1; j < 50000; j++)
+                for (int j = 1; j < 50000; j++)
                 {
                     int k = ToPandigital_maxsize9(j, i);
-                    if(k>answer) answer = k;
+                    if (k > answer) answer = k;
                 }
             }
             return answer;
@@ -892,12 +893,12 @@ namespace ProjectEuler
                 return false;
             }
             int answer = 0, value = 0;
-            for (int i = 1; i<=1000; i++)
+            for (int i = 1; i <= 1000; i++)
             {
                 int temp_value = 0;
-                for(int a = 1; a<i/2; a++)
+                for (int a = 1; a < i / 2; a++)
                 {
-                    for(int b = 1; b<i/2; b++)
+                    for (int b = 1; b < i / 2; b++)
                     {
                         int c = i - (a + b);
                         if (a >= b && a >= c && IsRightTriangle(b, c, a)) temp_value++;
@@ -917,7 +918,7 @@ namespace ProjectEuler
         {
             int answer = 1, temp = 1;
             string s = "0";
-            while (s.Length<1000001)
+            while (s.Length < 1000001)
             {
                 s += temp.ToString();
                 temp++;
@@ -929,9 +930,9 @@ namespace ProjectEuler
         {
             int answer = 0;
             int i = 1000000000;
-            while (i>0)
+            while (i > 0)
             {
-                if ( UsefulTools.IsPandigital(i)  && UsefulTools.IsPrime(i))
+                if (UsefulTools.IsPandigital(i) && UsefulTools.IsPrime(i))
                 {
                     answer = i;
                     break;
@@ -945,9 +946,9 @@ namespace ProjectEuler
         {
             static bool IsTriangular(int i)
             {
-                for(int j = 1; j<2*i; j++)
+                for (int j = 1; j < 2 * i; j++)
                 {
-                    if (j*(j+1) == 2*i) return true;
+                    if (j * (j + 1) == 2 * i) return true;
                 }
                 return false;
             }
@@ -961,8 +962,8 @@ namespace ProjectEuler
             {
                 if (c == '"' && value > 0)
                 {
-                    if(IsTriangular(value))answer++;
-                    value = 0;      
+                    if (IsTriangular(value)) answer++;
+                    value = 0;
                 }
                 else if (Char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
             }
@@ -972,9 +973,9 @@ namespace ProjectEuler
         {
             bool a = true;
             int answer = 3;
-            while(a)
+            while (a)
             {
-                
+
                 if (answer % 2 != 0 && !UsefulTools.IsPrime(answer))
                 {
                     for (int j = 1; j <= Math.Sqrt(answer / 2); j++)
@@ -983,7 +984,7 @@ namespace ProjectEuler
                     }
                     a = false;
                 }
-                NextNum:
+            NextNum:
                 answer++;
             }
             return answer - 1;
@@ -997,7 +998,7 @@ namespace ProjectEuler
             int i = 2;
             while (true)
             {
-                if (PrmFacNum(i) == 4 && PrmFacNum(i+1) == 4 && PrmFacNum(i + 2) == 4 && PrmFacNum(i + 3) == 4)
+                if (PrmFacNum(i) == 4 && PrmFacNum(i + 1) == 4 && PrmFacNum(i + 2) == 4 && PrmFacNum(i + 3) == 4)
                 {
                     return i;
                 }
@@ -1007,13 +1008,13 @@ namespace ProjectEuler
         public static string Problem49()
         {
             string ans = "";
-            for(int i = 1000; i <= 9999; i++)
+            for (int i = 1000; i <= 9999; i++)
             {
-                if(UsefulTools.IsPrime(i))
+                if (UsefulTools.IsPrime(i))
                 {
-                    for(int j = 1; j<8999; j++)
+                    for (int j = 1; j < 8999; j++)
                     {
-                        if (UsefulTools.IsPrime(i + j) && UsefulTools.IsPrime(i + 2 * j) && UsefulTools.IsPermutation(i, i + j) && UsefulTools.IsPermutation(i, i + 2 * j)) ans += i.ToString() + (i + j).ToString() + (i + 2 * j).ToString()+'\n';
+                        if (UsefulTools.IsPrime(i + j) && UsefulTools.IsPrime(i + 2 * j) && UsefulTools.IsPermutation(i, i + j) && UsefulTools.IsPermutation(i, i + 2 * j)) ans += i.ToString() + (i + j).ToString() + (i + 2 * j).ToString() + '\n';
                     }
                 }
             }
@@ -1044,14 +1045,14 @@ namespace ProjectEuler
         }
         public static int Problem51()
         {
-            
+
             List<int> Familly(int[] digits, int starting_pos)
             {
                 List<int> familly = new List<int>();
                 int size = 0;
                 int starting_digit = 0;
                 int length = digits.Length;
-                if(starting_pos<length) 
+                if (starting_pos < length)
                 {
                     int[] new_digits = new int[length];
                     for (int i = 0; i < length; i++) new_digits[i] = digits[i];
@@ -1077,11 +1078,11 @@ namespace ProjectEuler
                 }
                 return familly;
             }
-            
+
             int num = 10;
             while (true)
             {
-                if(UsefulTools.IsPrime(num) && (Familly(UsefulTools.DigitsOfNum(num), 0).Count == 8) && Familly(UsefulTools.DigitsOfNum(num),0).Contains(num)) return num;
+                if (UsefulTools.IsPrime(num) && (Familly(UsefulTools.DigitsOfNum(num), 0).Count == 8) && Familly(UsefulTools.DigitsOfNum(num), 0).Contains(num)) return num;
                 num++;
             }
         }
@@ -1089,9 +1090,9 @@ namespace ProjectEuler
         {
             bool IsSameDigitMultiple(int[] nums)
             {
-                for(int i = 0; i<nums.Length; i++)
+                for (int i = 0; i < nums.Length; i++)
                 {
-                    for(int j = i+1; j<nums.Length; j++)
+                    for (int j = i + 1; j < nums.Length; j++)
                     {
                         if (!IsSameDigit(nums[i], nums[j])) return false;
                     }
@@ -1107,7 +1108,7 @@ namespace ProjectEuler
                 return true;
             }
             int i = 1;
-            while (true) 
+            while (true)
             {
                 int[] digits = { i, 2 * i, 3 * i, 4 * i, 5 * i, 6 * i };
                 if (IsSameDigitMultiple(digits)) return i;
@@ -1119,16 +1120,16 @@ namespace ProjectEuler
             int answ = 0;
             BigInteger ReverseNum(BigInteger x)
             {
-                BigInteger y = 0, xsize = (int)Math.Floor(Math.Log10((double)x)+1);
-                while(x>0)
+                BigInteger y = 0, xsize = (int)Math.Floor(Math.Log10((double)x) + 1);
+                while (x > 0)
                 {
-                    y += (BigInteger) Math.Pow(10, (double)xsize-1) * (x % 10);
+                    y += (BigInteger)Math.Pow(10, (double)xsize - 1) * (x % 10);
                     xsize--;
                     x /= 10;
                 }
                 return y;
             }
-            for (int i = 1; i<10000; i++)
+            for (int i = 1; i < 10000; i++)
             {
                 int n = 0;
                 BigInteger num = i;
@@ -1141,25 +1142,188 @@ namespace ProjectEuler
             }
             return answ;
         }
+        public static int Problem58()
+        {
+            int num_of_primes_diagonal = 3, start = 3;
+            while ((double)num_of_primes_diagonal / (start*2-1) >= 0.1)
+            {
+                int first_num = (int)Math.Pow(start, 2) + 1;
+                if (UsefulTools.IsPrime(first_num + start)) num_of_primes_diagonal++;
+                if (UsefulTools.IsPrime(first_num + (start * 2) + 1)) num_of_primes_diagonal++;
+                if (UsefulTools.IsPrime(first_num + (start * 3) + 2)) num_of_primes_diagonal++;
+                start += 2;
+            }
+            return start;
+        }
+        
+        class Graph
+        {
+            int[] numbers;
+            int[,] edges;
+            int[] degrees;
+            static int[][] cliques = new int[0][];
+            int[] store;
+            int size;
+
+            public Graph(int[] _numbers, int[,] _edges, int[] _degrees)
+            {
+                numbers = _numbers;
+                edges = _edges;
+                degrees = _degrees;
+                size = _numbers.Length;
+                store = _numbers;
+            }
+            public Graph(int[,] _edges)
+            {
+                edges = _edges;
+                size = _edges.GetLength(0);
+                int[] _degrees = new int[size];
+                for(int i = 0; i<size; i++)
+                {
+                    for(int j = 0; j<size; j++)
+                    {
+                        if (_edges[i, j] == 1) _degrees[i]++;
+                    }
+                }
+                degrees = _degrees;
+                int[] _numbers = new int[size];
+                for(int i = 0; i<size; i++)
+                {
+                    _numbers[i] = 0;
+                }
+                numbers = _numbers;
+                store = _numbers;
+            }
+            public Graph(int[] _numbers, int[,] _edges)
+            {
+                numbers = _numbers;
+                edges = _edges;
+                size = _edges.GetLength(0);
+                int[] _degrees = new int[size];
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        if (_edges[i, j] == 1) _degrees[i]++;
+                    }
+                }
+                degrees = _degrees;
+                size = _numbers.Length;
+                store = _numbers;
+            }
+            bool IsClique(int a)
+            {
+                for(int i = 1; i<a; i++)
+                {
+                    for(int j = i+1; j<a; j++)
+                    {
+                        if (edges[store[i], store[j]]==0) return false;
+                    }
+                }
+                return true;
+            }
+            void AddClique(int n, int s)
+            {
+                int[] new_clique = new int[0];
+                for(int i = 0 ; i<s; i++)
+                {
+                    new_clique.Append(store[i]);
+                    Console.WriteLine(store[i]);
+                }
+                cliques.Append(new_clique);
+            }
+            public bool findCliques(int i, int l, int s)
+            {
+                for(int j = i+1; j<size-(s-l); j++)
+                {
+                    if (degrees[j]>=s-1)
+                    {
+                        store[l] = j;
+                        if (IsClique(l+1))
+                        {
+                            if (l < s)
+                            {
+                                findCliques(j, l + 1, s);
+                            }
+                            else
+                            {
+                                AddClique(l + 1,s);
+                                Console.WriteLine("aaa");
+                            }
+                        }
+                    }
+                }
+                if(cliques.Length > 0) return true;
+                return false;
+            }
+            public int[] Numbers { get => numbers; set => numbers = value; }
+            public int[,] Edges { get => edges; set => edges = value; }
+            public int[] Degrees { get => degrees; set => degrees = value; }
+            public int Size { get => size; set => size = value; }
+            public static int[][] Cliques { get => cliques; set => cliques = value; }
+        }
+        public static int Problem60()
+        {
+            static bool AreConcatenaintable(int prime1, int prime2)
+            {
+                if (!UsefulTools.IsPrime(Convert.ToInt32(prime1.ToString() + prime2.ToString()))) return false;
+                if (!UsefulTools.IsPrime(Convert.ToInt32(prime2.ToString() + prime1.ToString()))) return false;
+                return true;
+            }
+            
+            List<int> primes = new List<int>();
+            for (int i = 3; i < 1000; i++)
+            {
+                if (UsefulTools.IsPrime(i)) primes.Add(i);
+            }
+            int[,] Edges(int[] _primes)
+            {
+                int[,] graph = new int[_primes.Length, _primes.Length];
+                for(int i = 0; i<_primes.Length; i++)
+                {
+                    for(int j = 0; j<_primes.Length; j++)
+                    {
+                        if (AreConcatenaintable(_primes[i], _primes[j])) graph[i, j] = 1;
+                    }
+                }
+                return graph;
+            }
+            Graph prime_graph = new Graph(primes.ToArray(), Edges(primes.ToArray()));
+            if (prime_graph.findCliques(0, 1, 4))
+            {
+                foreach (int[] clique in Graph.Cliques)
+                {
+                    foreach(int prime in clique)
+                    {
+                        Console.Write(primes[prime]);
+                    }
+                    Console.WriteLine();
+                }
+            }
+            
+            
+            return 0;
+        }
         public static string Problem67()
         {
             return Problem18();
         }
-        public static BigInteger Problem700()
+        public static BigInteger Problem700() //unsolved
         {
             BigInteger euler = 1504170715041707, temp = euler, num = 0;
             BigInteger mod = 4503599627370517;
             BigInteger sum = euler;
-            for(BigInteger i = 1; i<mod; i++)
+            for (BigInteger i = 1; i < mod; i++)
             {
                 num += euler;
-                if(num>mod) num%=mod;
-                if(num<temp)
+                if (num > mod) num %= mod;
+                if (num < temp)
                 {
                     temp = num;
                     sum += num;
                     Console.WriteLine(num);
                 }
+                Console.WriteLine(i);
             }
             return sum;
         }
@@ -1168,17 +1332,18 @@ namespace ProjectEuler
             string text = UsefulTools.HTMLText(836);
             string answer = "";
             bool isbold = false;
-            for (int i = 0; i< text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] == '<' && text[i + 1] == 'b' && text[i + 2] == '>')
                 {
                     answer += text[i + 3];
                     isbold = true;
                 }
-                if(isbold && text[i] == ' ') answer += text[i + 1];
+                if (isbold && text[i] == ' ') answer += text[i + 1];
                 if (text[i] == '<' && text[i + 1] == '/' && text[i + 2] == 'b' && text[i + 3] == '>') isbold = false;
             }
             return answer;
         }
     }
 }
+
