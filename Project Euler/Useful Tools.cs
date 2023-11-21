@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Numerics;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ProjectEuler
@@ -19,7 +20,7 @@ namespace ProjectEuler
         }
         public static string ProblemText(int problemNumber)
         {
-           
+
             static string HtmlToPlainText(string html)
             {
                 const string tagWhiteSpace = @"(>|$)(\W|\n|\r)+<";
@@ -60,6 +61,16 @@ namespace ProjectEuler
             for (var i = 2; i <= Math.Sqrt(x); i++)
             {
                 if (x % i == 0) return false;
+            }
+            return true;
+        }
+        public static bool IsPrime(ulong x, List<ulong> primes)
+        {
+            if (x < 2) return false;
+            foreach (var prime in primes)
+            {
+                if (prime > Math.Sqrt(x)) break;
+                if (x % prime == 0) return false;
             }
             return true;
         }
@@ -243,7 +254,7 @@ namespace ProjectEuler
             if (x % 2 == 0)
             {
                 list.Add(2);
-                while ( x % 2 == 0 ) 
+                while (x % 2 == 0)
                 {
                     x /= 2;
                 }
@@ -373,15 +384,15 @@ namespace ProjectEuler
             if (x.Milliseconds == 1) timeSpent += $"1 milisecond";
             if (x > minimum)
             {
-                return $"Solution took {timeSpent}."; 
+                return $"Solution took {timeSpent}.";
             }
             return "Solution took less than 1 milisecond!";
         }
         public static bool IsPalindromeString(string x)
         {
-            for(int i = 0; i< x.Length/2; i++)
+            for (int i = 0; i < x.Length / 2; i++)
             {
-                if (x[i] != x[x.Length - i-1]) return false;
+                if (x[i] != x[x.Length - i - 1]) return false;
             }
             return true;
         }
@@ -389,21 +400,21 @@ namespace ProjectEuler
         {
             Console.WriteLine("Wait while the problems are being checked...");
             int howmany = 0;
-            for (int i = 0; i<300; i++)
+            for (int i = 0; i < 300; i++)
             {
-                if(ProblemsSolved.DoesProblemExist(i)) howmany++;
+                if (ProblemsSolved.DoesProblemExist(i)) howmany++;
             }
             int[] solved = new int[howmany];
             int index = 0;
-            for (int i = 1; i<300; i++)
+            for (int i = 1; i < 300; i++)
             {
                 if (ProblemsSolved.DoesProblemExist(i)) solved[index++] = i;
             }
             Console.Write($"\n\nThere are {howmany} problems solved: ");
             int x = 0;
-            for (int i = 0; i<howmany; i++)
+            for (int i = 0; i < howmany; i++)
             {
-                if (i != howmany-1 && (solved[i + 1] == solved[i] + 1))
+                if (i != howmany - 1 && (solved[i + 1] == solved[i] + 1))
                 {
                     if (x == 0)
                     {
@@ -411,12 +422,283 @@ namespace ProjectEuler
                         x = 1;
                     }
                 }
-                else if (i != howmany-1)
+                else if (i != howmany - 1)
                 {
                     Console.Write($"{solved[i]},");
                     x = 0;
                 }
                 else Console.Write($"{solved[i]}\n\n");
+            }
+        }
+    }
+    class Graph<T>
+    {
+        private readonly List<Vertex<T>> vertices;
+        public Graph() => vertices = new List<Vertex<T>>();
+
+        public void AddVertex(Vertex<T> vertex) => vertices.Add(vertex);
+
+        public int Size => vertices.Count;
+        public List<List<Vertex<T>>> FindCliques(int size)
+        {
+            var cliques = new List<List<Vertex<T>>>();
+            var verticesCopy = new List<Vertex<T>>(vertices);
+            while (verticesCopy.Count > 0)
+            {
+                var vertex = verticesCopy[0];
+                if (vertex.Degree < size - 1)
+                {
+                    verticesCopy.Remove(vertex);
+                    continue;
+                }
+                var neighbours = vertex.Neighbours;
+                var clique = new List<Vertex<T>> { vertex };
+                foreach (var neighbour in neighbours)
+                {
+                    if (neighbour.Degree >= size - 1)
+                    {
+                        var isClique = true;
+                        foreach (var v in clique) if (v | neighbour) isClique = false;
+                        if (isClique) clique.Add(neighbour);
+                    }
+                }
+                if (clique.Count >= size) cliques.Add(clique);
+                verticesCopy.Remove(vertex);
+            }
+            return cliques;
+        }
+        public Vertex<T> FindVertex(T value)
+        {
+            return vertices.Find(v => v.Value.Equals(value));
+        }
+        public List<Vertex<T>> Vertices => vertices;
+    }
+    class Vertex<T>
+    {
+        public T Value { get; set; }
+        public List<Vertex<T>> Neighbours { get; set; }
+        public Vertex(T value, List<Vertex<T>> neighbours, params Vertex<T>[] parameters) : this(value, (IEnumerable<Vertex<T>>)parameters) { }
+        public Vertex(T value, IEnumerable<Vertex<T>> neighboursArray = null)
+        {
+            Value = value;
+            Neighbours = neighboursArray?.ToList() ?? new List<Vertex<T>>();
+        }
+        public void AddNeighbour(Vertex<T> neighbour) => Neighbours.Add(neighbour);
+        public void AddNeighbours(params Vertex<T>[] neighbours) => Neighbours.AddRange(neighbours);
+        public void AddNeighbours(IEnumerable<Vertex<T>> neighbours) => Neighbours.AddRange(neighbours);
+        public void RemoveNeighbour(Vertex<T> neighbour) => Neighbours.Remove(neighbour);
+        public int Degree => Neighbours.Count;
+        public override string ToString() => Neighbours.Aggregate(new StringBuilder($"{Value}: "), (sb, v) => sb.Append($"{v.Value}, ")).ToString();
+        public static bool operator &(Vertex<T> a, Vertex<T> b) => a.Neighbours.Contains(b);
+        public static bool operator |(Vertex<T> a, Vertex<T> b) => !(a & b);
+    }
+    class PrimeChecker
+    {
+        List<byte> Primes_byte;
+        List<ushort> Primes_short;
+        List<uint> Primes_int;
+        List<ulong> Primes_long;
+        List<BigInteger> Primes_big;
+        bool use_byte = false;
+        bool use_short = false;
+        bool use_int = false;
+        bool use_long = false;
+        bool use_big = false;
+        public PrimeChecker() : this(new List<byte> { 2, 3 }) { }
+        public PrimeChecker(List<byte> primes)
+        {
+            Primes_byte = primes;
+            use_byte = true;
+        }
+        public PrimeChecker(List<ushort> primes)
+        {
+            Primes_short = primes;
+            use_short = true;
+        }
+        public PrimeChecker(List<uint> primes)
+        {
+            Primes_int = primes;
+            use_int = true;
+        }
+        public PrimeChecker(List<ulong> primes)
+        {
+            Primes_long = primes;
+            use_long = true;
+        }
+        public PrimeChecker(List<BigInteger> primes)
+        {
+            Primes_big = primes;
+            use_big = true;
+        }
+
+        public bool IsPrime(BigInteger x)
+        { 
+            if(x< 2) return false;
+            ChangeSizeIfNecessery(x);
+            BigInteger sqrt = Sqrt(x);
+            if (use_byte) return PrimeCheck_byte((byte)sqrt, (byte)x);
+            if (use_short) return PrimeCheck_short((ushort)sqrt, (ushort)x);
+            if (use_int) return PrimeCheck_int((uint)sqrt, (uint)x);
+            if (use_long) return PrimeCheck_long((ulong)sqrt, (ulong)x);
+            if (use_big) return PrimeCheck_big(sqrt, x);
+            
+            return true;
+        }
+        bool PrimeCheck_byte(byte sqrt, byte x)
+        {
+            foreach (var prime in Primes_byte)
+            {
+                if (prime > sqrt) break;
+                if (x % prime == 0) return false;
+            }
+            if (Primes_byte.Last() < sqrt)
+            {
+                for (byte i = (byte)(Primes_byte.Last() + 2); i <= sqrt; i += 2)
+                {
+                    if (IsPrime(i))
+                    {
+                        Primes_byte.Add(i);
+                        if (x % i == 0) return false;
+                    }
+                }
+            }
+            return true;
+        }
+        bool PrimeCheck_short(ushort sqrt, ushort x)
+        {
+            foreach (var prime in Primes_short)
+            {
+                if (prime > sqrt) break;
+                if (x % prime == 0) return false;
+            }
+            if (Primes_short.Last() < sqrt)
+            {
+                for (ushort i = (ushort)(Primes_short.Last() + 2); i <= sqrt; i += 2)
+                {
+                    if (IsPrime(i))
+                    {
+                        Primes_short.Add(i);
+                        if (x % i == 0) return false;
+                    }
+                }
+            }
+            return true;
+        }
+        bool PrimeCheck_int(uint sqrt, uint x)
+        {
+            foreach (var prime in Primes_int)
+            {
+                if (prime > sqrt) break;
+                if (x % prime == 0) return false;
+            }
+            if (Primes_int.Last() < sqrt)
+            {
+                for (uint i = (uint)(Primes_int.Last() + 2); i <= sqrt; i += 2)
+                {
+                    if (IsPrime(i))
+                    {
+                        Primes_int.Add(i);
+                        if (x % i == 0) return false;
+                    }
+                }
+            }
+            return true;
+        }
+        bool PrimeCheck_long(ulong sqrt, ulong x)
+        {
+            foreach (var prime in Primes_long)
+            {
+                if (prime > sqrt) break;
+                if (x % prime == 0) return false;
+            }
+            if (Primes_long.Last() < sqrt)
+            {
+                for (ulong i = (ulong)(Primes_long.Last() + 2); i <= sqrt; i += 2)
+                {
+                    if (IsPrime(i))
+                    {
+                        Primes_long.Add(i);
+                        if (x % i == 0) return false;
+                    }
+                }
+            }
+            return true;
+        }
+        bool PrimeCheck_big(BigInteger sqrt, BigInteger x)
+        {
+            foreach (var prime in Primes_big)
+            {
+                if (prime > sqrt) break;
+                if (x % prime == 0) return false;
+            }
+            if (Primes_big.Last() < sqrt)
+            {
+                for (BigInteger i = Primes_big.Last() + 2; i <= sqrt; i += 2)
+                {
+                    if (IsPrime(i))
+                    {
+                        Primes_big.Add(i);
+                        if (x % i == 0) return false;
+                    }
+                }
+            }
+            return true;
+        }
+        static BigInteger Sqrt(BigInteger x)
+        {
+            if (x == 0) return 0;
+            if (x < 0) throw new ArithmeticException("NaN");
+            var n = (x >> 1) + 1;
+            var n1 = (n + (x / n)) >> 1;
+            while (n1 < n)
+            {
+                n = n1;
+                n1 = (n + (x / n)) >> 1;
+            }
+            return n;
+        }
+        void ChangeSizeIfNecessery(BigInteger x)
+        {
+            if (use_big) return;
+            if (use_byte)
+            {
+                if (x > byte.MaxValue)
+                {
+                    use_byte = false;
+                    use_short = true;
+                    Primes_short = new List<ushort>(Primes_byte.Select(b => (ushort)b));
+                    Primes_byte = null;
+                }
+            }
+            if (use_short)
+            {
+                if (x > ushort.MaxValue)
+                {
+                    use_short = false;
+                    use_int = true;
+                    Primes_int = new List<uint>(Primes_short.Select(b => (uint)b));
+                    Primes_short = null;
+                }
+            }
+            if (use_int)
+            {
+                if (x > uint.MaxValue)
+                {
+                    use_int = false;
+                    use_long = true;
+                    Primes_long = new List<ulong>(Primes_int.Select(b => (ulong)b));
+                    Primes_int = null;
+                }
+            }
+            if (use_long)
+            {
+                if (x > ulong.MaxValue)
+                {
+                    use_long = false;
+                    use_big = true;
+                    Primes_big = new List<BigInteger>(Primes_long.Select(b => (BigInteger)b));
+                    Primes_big = null;
+                }
             }
         }
     }

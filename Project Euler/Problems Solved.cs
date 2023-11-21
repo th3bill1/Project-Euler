@@ -937,7 +937,6 @@ namespace ProjectEuler
                     answer = i;
                     break;
                 }
-                Console.WriteLine(i);
                 i--;
             }
             return answer;
@@ -1019,29 +1018,6 @@ namespace ProjectEuler
                 }
             }
             return ans;
-        }
-        public static void Problem50()
-        {
-            for (BigInteger i = 2; i < 300; i++)
-            {
-                for (BigInteger multiple = 1; multiple < 1000; multiple++)
-                {
-                    BigInteger num = multiple * i;
-                    int[] digits = UsefulTools.DigitsOfNum(num);
-                    int sum = 0;
-                    bool is_only_ones = true;
-                    foreach (int digit in digits)
-                    {
-                        if (digit != 1) is_only_ones = false;
-                        sum += digit;
-                    }
-                    if (sum == i && is_only_ones)
-                    {
-                        Console.WriteLine(i + ": " + num);
-                        break;
-                    }
-                }
-            }
         }
         public static int Problem51()
         {
@@ -1145,7 +1121,7 @@ namespace ProjectEuler
         public static int Problem58()
         {
             int num_of_primes_diagonal = 3, start = 3;
-            while ((double)num_of_primes_diagonal / (start*2-1) >= 0.1)
+            while ((double)num_of_primes_diagonal / (start * 2 - 1) >= 0.1)
             {
                 int first_num = (int)Math.Pow(start, 2) + 1;
                 if (UsefulTools.IsPrime(first_num + start)) num_of_primes_diagonal++;
@@ -1155,177 +1131,53 @@ namespace ProjectEuler
             }
             return start;
         }
-        
-        class Graph
-        {
-            int[] numbers;
-            int[,] edges;
-            int[] degrees;
-            static int[][] cliques = new int[0][];
-            int[] store;
-            int size;
 
-            public Graph(int[] _numbers, int[,] _edges, int[] _degrees)
+
+        public static int Problem60()
+        {
+            PrimeChecker primeChecker = new();
+            bool AreConcatenaintable(BigInteger prime1, BigInteger prime2)
             {
-                numbers = _numbers;
-                edges = _edges;
-                degrees = _degrees;
-                size = _numbers.Length;
-                store = _numbers;
-            }
-            public Graph(int[,] _edges)
-            {
-                edges = _edges;
-                size = _edges.GetLength(0);
-                int[] _degrees = new int[size];
-                for(int i = 0; i<size; i++)
-                {
-                    for(int j = 0; j<size; j++)
-                    {
-                        if (_edges[i, j] == 1) _degrees[i]++;
-                    }
-                }
-                degrees = _degrees;
-                int[] _numbers = new int[size];
-                for(int i = 0; i<size; i++)
-                {
-                    _numbers[i] = 0;
-                }
-                numbers = _numbers;
-                store = _numbers;
-            }
-            public Graph(int[] _numbers, int[,] _edges)
-            {
-                numbers = _numbers;
-                edges = _edges;
-                size = _edges.GetLength(0);
-                int[] _degrees = new int[size];
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        if (_edges[i, j] == 1) _degrees[i]++;
-                    }
-                }
-                degrees = _degrees;
-                size = _numbers.Length;
-                store = _numbers;
-            }
-            bool IsClique(int a)
-            {
-                for(int i = 1; i<a; i++)
-                {
-                    for(int j = i+1; j<a; j++)
-                    {
-                        if (edges[store[i], store[j]]==0) return false;
-                    }
-                }
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime2) + 1))) * prime1 + prime2)) return false;
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime1) + 1))) * prime2 + prime1)) return false;
                 return true;
             }
-            void AddClique(int n, int s)
+            Graph<int> graph = new();
+            int i = 3, answer = int.MaxValue / 2;
+            while (i < (answer + 12))
             {
-                int[] new_clique = new int[0];
-                for(int i = 0 ; i<s; i++)
+                if (primeChecker.IsPrime(i))
                 {
-                    new_clique.Append(store[i]);
-                    Console.WriteLine(store[i]);
-                }
-                cliques.Append(new_clique);
-            }
-            public bool findCliques(int i, int l, int s)
-            {
-                for(int j = i+1; j<size-(s-l); j++)
-                {
-                    if (degrees[j]>=s-1)
+                    Vertex<int> new_vertex = new(i);
+                    List<Vertex<int>> neighbours = new();
+                    foreach (Vertex<int> v in graph.Vertices)
                     {
-                        store[l] = j;
-                        if (IsClique(l+1))
+                        if (AreConcatenaintable(i, v.Value)) neighbours.Add(v);
+                    }
+                    new_vertex.AddNeighbours(neighbours);
+                    graph.AddVertex(new_vertex);
+                    foreach (Vertex<int> v in neighbours) v.AddNeighbour(new_vertex);
+                    List<List<Vertex<int>>> cliques = graph.FindCliques(5);
+                    if (cliques.Count > 0)
+                    {
+                        foreach (List<Vertex<int>> clique in cliques)
                         {
-                            if (l < s)
+                            int sum = 0;
+                            foreach (Vertex<int> v in clique)
                             {
-                                findCliques(j, l + 1, s);
+                                sum += v.Value;
                             }
-                            else
-                            {
-                                AddClique(l + 1,s);
-                                Console.WriteLine("aaa");
-                            }
+                            if (sum < answer) answer = sum;
                         }
                     }
                 }
-                if(cliques.Length > 0) return true;
-                return false;
+                i++;
             }
-            public int[] Numbers { get => numbers; set => numbers = value; }
-            public int[,] Edges { get => edges; set => edges = value; }
-            public int[] Degrees { get => degrees; set => degrees = value; }
-            public int Size { get => size; set => size = value; }
-            public static int[][] Cliques { get => cliques; set => cliques = value; }
-        }
-        public static int Problem60()
-        {
-            static bool AreConcatenaintable(int prime1, int prime2)
-            {
-                if (!UsefulTools.IsPrime(Convert.ToInt32(prime1.ToString() + prime2.ToString()))) return false;
-                if (!UsefulTools.IsPrime(Convert.ToInt32(prime2.ToString() + prime1.ToString()))) return false;
-                return true;
-            }
-            
-            List<int> primes = new List<int>();
-            for (int i = 3; i < 1000; i++)
-            {
-                if (UsefulTools.IsPrime(i)) primes.Add(i);
-            }
-            int[,] Edges(int[] _primes)
-            {
-                int[,] graph = new int[_primes.Length, _primes.Length];
-                for(int i = 0; i<_primes.Length; i++)
-                {
-                    for(int j = 0; j<_primes.Length; j++)
-                    {
-                        if (AreConcatenaintable(_primes[i], _primes[j])) graph[i, j] = 1;
-                    }
-                }
-                return graph;
-            }
-            Graph prime_graph = new Graph(primes.ToArray(), Edges(primes.ToArray()));
-            if (prime_graph.findCliques(0, 1, 4))
-            {
-                foreach (int[] clique in Graph.Cliques)
-                {
-                    foreach(int prime in clique)
-                    {
-                        Console.Write(primes[prime]);
-                    }
-                    Console.WriteLine();
-                }
-            }
-            
-            
-            return 0;
+            return (int)answer;
         }
         public static string Problem67()
         {
             return Problem18();
-        }
-        public static BigInteger Problem700() //unsolved
-        {
-            BigInteger euler = 1504170715041707, temp = euler, num = 0;
-            BigInteger mod = 4503599627370517;
-            BigInteger sum = euler;
-            for (BigInteger i = 1; i < mod; i++)
-            {
-                num += euler;
-                if (num > mod) num %= mod;
-                if (num < temp)
-                {
-                    temp = num;
-                    sum += num;
-                    Console.WriteLine(num);
-                }
-                Console.WriteLine(i);
-            }
-            return sum;
         }
         public static string Problem836()
         {
