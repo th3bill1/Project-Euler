@@ -1136,10 +1136,10 @@ namespace ProjectEuler
         public static int Problem60()
         {
             PrimeChecker primeChecker = new();
-            bool AreConcatenaintable(BigInteger prime1, BigInteger prime2)
+            bool AreConcatenaintable(int prime1, int prime2)
             {
-                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime2) + 1))) * prime1 + prime2)) return false;
-                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime1) + 1))) * prime2 + prime1)) return false;
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)Math.Log10(prime2) + 1)) * prime1 + prime2)) return false;
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)Math.Log10(prime1) + 1)) * prime2 + prime1)) return false;
                 return true;
             }
             Graph<int> graph = new();
@@ -1178,6 +1178,30 @@ namespace ProjectEuler
         public static string Problem67()
         {
             return Problem18();
+        }
+        public static int Problem112()
+        {
+            var i = 100;
+            var bouncy = 0;
+            static bool IsBouncy(int x)
+            {
+                var arr = UsefulTools.DigitsOfNum(x);
+                var ans1 = true;
+                var ans2 = true;
+                for(var i = 1; i < arr.Length; i++)
+                {
+                    if (arr[i] > arr[i - 1]) ans1 = false;
+                    if (arr[i] < arr[i - 1]) ans2 = false;
+                }
+                return !(ans1 || ans2);
+            }
+            while (true)
+            {
+                if (IsBouncy(i)) bouncy++;
+                if (bouncy * 100 >= i * 99) return i;
+                i++;
+            }
+
         }
         public static string Problem836()
         {
