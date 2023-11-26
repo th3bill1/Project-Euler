@@ -916,30 +916,26 @@ namespace ProjectEuler
         }
         public static int Problem40()
         {
-            int answer = 1, temp = 1;
-            string s = "0";
-            while (s.Length < 1000001)
+            var i = 1;
+            List<int> list = new() { 0 };
+            while (list.Count < 1000001)
             {
-                s += temp.ToString();
-                temp++;
+                foreach (char c in i.ToString()) list.Add(Convert.ToInt32(c.ToString()));
+                i++;
             }
-            answer *= (s[1] - 48) * (s[10] - 48) * (s[100] - 48) * (s[1000] - 48) * (s[10000] - 48) * (s[100000] - 48) * (s[1000000] - 48);
-            return answer;
+            return list[1] * list[10] * list[100] * list[1000] * list[10000] * list[100000] * list[1000000];
         }
         public static int Problem41()
         {
-            int answer = 0;
-            int i = 1000000000;
+            PrimeChecker pm = new();
+
+            var i = 9;
             while (i > 0)
             {
-                if (UsefulTools.IsPandigital(i) && UsefulTools.IsPrime(i))
-                {
-                    answer = i;
-                    break;
-                }
+                foreach (var j in UsefulTools.PandigitalNumsDescending(i, 1)) if (pm.IsPrime(j)) return (int)j;
                 i--;
             }
-            return answer;
+            return 0;
         }
         public static int Problem42()
         {
@@ -964,9 +960,25 @@ namespace ProjectEuler
                     if (IsTriangular(value)) answer++;
                     value = 0;
                 }
-                else if (Char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
+                else if (char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
             }
             return answer;
+        }
+        public static BigInteger Problem43()
+        {
+            BigInteger sum = 0;
+            foreach (var pan in UsefulTools.PandigitalNumsDescending(10, 0))
+            {
+                if (pan.ToString()[1..4] is { } s1 && Convert.ToInt32(s1) % 2 != 0) continue;
+                if (pan.ToString()[2..5] is { } s2 && Convert.ToInt32(s2) % 3 != 0) continue;
+                if (pan.ToString()[3..6] is { } s3 && Convert.ToInt32(s3) % 5 != 0) continue;
+                if (pan.ToString()[4..7] is { } s4 && Convert.ToInt32(s4) % 7 != 0) continue;
+                if (pan.ToString()[5..8] is { } s5 && Convert.ToInt32(s5) % 11 != 0) continue;
+                if (pan.ToString()[6..9] is { } s6 && Convert.ToInt32(s6) % 13 != 0) continue;
+                if (pan.ToString()[7..10] is { } s7 && Convert.ToInt32(s7) % 17 != 0) continue;
+                sum += pan;
+            }
+            return sum;
         }
         public static int Problem46()
         {
@@ -1019,6 +1031,28 @@ namespace ProjectEuler
             }
             return ans;
         }
+        public static int Problem50()
+        {
+            PrimeChecker pm = new();
+            int answer = 0, max = 0;
+            List<int> primes = new();
+            for (int i = 2; i < 1000000; i++) if (pm.IsPrime(i)) primes.Add(i);
+            for (int i = 0; i < primes.Count; i++)
+            {
+                int sum = 0, j = i;
+                while (sum < 1000000 && j < primes.Count)
+                {
+                    sum += primes[j];
+                    if (pm.IsPrime(sum) && sum > max && j - i > max)
+                    {
+                        max = j - i;
+                        answer = sum;
+                    }
+                    j++;
+                }
+            }
+            return answer;
+        }
         public static int Problem51()
         {
 
@@ -1043,7 +1077,7 @@ namespace ProjectEuler
                             if (new_digits[k] == -1) digits2[k] = j;
                             else digits2[k] = new_digits[k];
                         }
-                        int value = UsefulTools.DigitsToNum(digits2);
+                        int value = (int)UsefulTools.DigitsToNum(digits2);
                         if (UsefulTools.IsPrime(value))
                         {
                             familly.Add(value);
@@ -1188,7 +1222,7 @@ namespace ProjectEuler
                 var arr = UsefulTools.DigitsOfNum(x);
                 var ans1 = true;
                 var ans2 = true;
-                for(var i = 1; i < arr.Length; i++)
+                for (var i = 1; i < arr.Length; i++)
                 {
                     if (arr[i] > arr[i - 1]) ans1 = false;
                     if (arr[i] < arr[i - 1]) ans2 = false;
@@ -1202,6 +1236,40 @@ namespace ProjectEuler
                 i++;
             }
 
+        }
+        public static ulong Problem719() // works for 10^10 but takes too long for 10^12
+        {
+            List<ulong> AllSums(string x,  ulong maxValue, int index = 0)
+            {
+                if (x.Length == 1)
+                {
+                    return new() { Convert.ToUInt64(x) };
+                }
+                string begining_to_index = x[..(index + 1)];
+                if (index == x.Length - 1)
+                {
+                    return new() { Convert.ToUInt64(begining_to_index) };
+                }
+                List<ulong> sums1 = new();
+                foreach (var i in AllSums(x[(index + 1)..],maxValue))
+                {
+                    sums1.Add(i + Convert.ToUInt64(begining_to_index));
+                }
+                var value = sums1.Concat(AllSums(x,maxValue, index + 1)).ToList();
+                //value.RemoveAll(i => i > maxValue);
+                return value;
+            }
+            ulong sum = 0;
+            List<ulong> snumbers = new();
+            for (ulong i = 1; i * i <= 100000000000; i++)
+            {
+                var num = i * i;
+                var sums = AllSums(num.ToString(),i);
+                //if(sums.Count>0)sums.RemoveAt(sums.Count - 1);
+                foreach (var j in sums) if (j == i) snumbers.Add(num);
+            }
+            foreach (var i in snumbers.Distinct()) sum += i;
+            return sum;
         }
         public static string Problem836()
         {
