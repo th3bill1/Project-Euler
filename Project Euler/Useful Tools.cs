@@ -44,11 +44,11 @@ namespace ProjectEuler
             var problemText = pureText.Substring(startIndex + startingLength, endIndex - startIndex - startingLength - 3);
             return ($"\nProblem number {problemNumber}:\n{problemText}");
         }
-        public static long BinomialCooficient(long top, long bottom)
+        public static BigInteger BinomialCooficient(BigInteger top, BigInteger bottom)
         {
-            long answer = 1;
+            BigInteger answer = 1;
             if (bottom > top) return 0;
-            for (long d = 1; d <= bottom; d++)
+            for (BigInteger d = 1; d <= bottom; d++)
             {
                 answer *= top--;
                 answer /= d;

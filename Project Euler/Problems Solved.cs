@@ -360,9 +360,9 @@ namespace ProjectEuler
 
             return answer;
         }
-        public static long Problem15()
+        public static int Problem15()
         {
-            return UsefulTools.BinomialCooficient(40, 20);
+            return (int)UsefulTools.BinomialCooficient(40, 20);
         }
         public static long Problem16()
         {
@@ -1124,6 +1124,18 @@ namespace ProjectEuler
                 if (IsSameDigitMultiple(digits)) return i;
                 i++;
             }
+        }
+        public static int Problem53()
+        {
+            var count = 0;
+            for(uint i = 1; i <= 100; i++)
+            {
+                for(uint j = 1; j <= i; j++)
+                {
+                    if (UsefulTools.BinomialCooficient(i, j) > 1000000) count++;
+                }
+            }
+            return count;
         }
         public static int Problem55()
         {
