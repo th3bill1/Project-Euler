@@ -360,9 +360,9 @@ namespace ProjectEuler
 
             return answer;
         }
-        public static long Problem15()
+        public static int Problem15()
         {
-            return UsefulTools.BinomialCooficient(40, 20);
+            return (int)UsefulTools.BinomialCooficient(40, 20);
         }
         public static long Problem16()
         {
@@ -916,30 +916,26 @@ namespace ProjectEuler
         }
         public static int Problem40()
         {
-            int answer = 1, temp = 1;
-            string s = "0";
-            while (s.Length < 1000001)
+            var i = 1;
+            List<int> list = new() { 0 };
+            while (list.Count < 1000001)
             {
-                s += temp.ToString();
-                temp++;
+                foreach (char c in i.ToString()) list.Add(Convert.ToInt32(c.ToString()));
+                i++;
             }
-            answer *= (s[1] - 48) * (s[10] - 48) * (s[100] - 48) * (s[1000] - 48) * (s[10000] - 48) * (s[100000] - 48) * (s[1000000] - 48);
-            return answer;
+            return list[1] * list[10] * list[100] * list[1000] * list[10000] * list[100000] * list[1000000];
         }
         public static int Problem41()
         {
-            int answer = 0;
-            int i = 1000000000;
+            PrimeChecker pm = new();
+
+            var i = 9;
             while (i > 0)
             {
-                if (UsefulTools.IsPandigital(i) && UsefulTools.IsPrime(i))
-                {
-                    answer = i;
-                    break;
-                }
+                foreach (var j in UsefulTools.PandigitalNumsDescending(i, 1)) if (pm.IsPrime(j)) return (int)j;
                 i--;
             }
-            return answer;
+            return 0;
         }
         public static int Problem42()
         {
@@ -964,89 +960,101 @@ namespace ProjectEuler
                     if (IsTriangular(value)) answer++;
                     value = 0;
                 }
-                else if (Char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
+                else if (char.IsLetter(c)) value += Convert.ToInt16(c) - 64;
             }
             return answer;
         }
-        public static int Problem44()
+        public static BigInteger Problem43()
         {
-            List<int> pentagonal = new();
-            var i = 1;
-            var distance = int.MaxValue;
-            while (3 * i + 1 < distance)
+            BigInteger sum = 0;
+            foreach (var pan in UsefulTools.PandigitalNumsDescending(10, 0))
             {
-                var new_pentagonal = i * (3 * i - 1) / 2;
-                foreach (var a in pentagonal)
+                if (pan.ToString()[1..4] is { } s1 && Convert.ToInt32(s1) % 2 != 0) continue;
+                if (pan.ToString()[2..5] is { } s2 && Convert.ToInt32(s2) % 3 != 0) continue;
+                if (pan.ToString()[3..6] is { } s3 && Convert.ToInt32(s3) % 5 != 0) continue;
+                if (pan.ToString()[4..7] is { } s4 && Convert.ToInt32(s4) % 7 != 0) continue;
+                if (pan.ToString()[5..8] is { } s5 && Convert.ToInt32(s5) % 11 != 0) continue;
+                if (pan.ToString()[6..9] is { } s6 && Convert.ToInt32(s6) % 13 != 0) continue;
+                if (pan.ToString()[7..10] is { } s7 && Convert.ToInt32(s7) % 17 != 0) continue;
+                sum += pan;
+            }
+            return sum;
+        }
+        public static int Problem46()
+        {
+            bool a = true;
+            int answer = 3;
+            while (a)
+            {
+
+                if (answer % 2 != 0 && !UsefulTools.IsPrime(answer))
                 {
-                    if(pentagonal.Contains(new_pentagonal-a))
+                    for (int j = 1; j <= Math.Sqrt(answer / 2); j++)
                     {
-                        var b = 2*a<new_pentagonal?new_pentagonal-2*a:new_pentagonal-2*a;
-                        if (pentagonal.Contains(b) && b < distance)
-                        {
-                            Console.WriteLine($"a: {a} b: {b} a+b: {a + b}");
-                            distance = b;
-                        }
+                        if (UsefulTools.IsPrime(answer - Convert.ToInt32(Math.Pow(j, 2)) * 2)) goto NextNum;
                     }
+                    a = false;
                 }
-                pentagonal.Add(new_pentagonal);
-                if (i % 1000 == 0) Console.WriteLine(i);
+            NextNum:
+                answer++;
+            }
+            return answer - 1;
+        }
+        public static int Problem47()
+        {
+            static int PrmFacNum(int num)
+            {
+                return UsefulTools.Prime_factors(num).Length;
+            }
+            int i = 2;
+            while (true)
+            {
+                if (PrmFacNum(i) == 4 && PrmFacNum(i + 1) == 4 && PrmFacNum(i + 2) == 4 && PrmFacNum(i + 3) == 4)
+                {
+                    return i;
+                }
                 i++;
             }
-            return distance;
         }
-    public static int Problem46()
-    {
-        bool a = true;
-        int answer = 3;
-        while (a)
+        public static string Problem49()
         {
-
-            if (answer % 2 != 0 && !UsefulTools.IsPrime(answer))
+            string ans = "";
+            for (int i = 1000; i <= 9999; i++)
             {
-                for (int j = 1; j <= Math.Sqrt(answer / 2); j++)
+                if (UsefulTools.IsPrime(i))
                 {
-                    if (UsefulTools.IsPrime(answer - Convert.ToInt32(Math.Pow(j, 2)) * 2)) goto NextNum;
-                }
-                a = false;
-            }
-        NextNum:
-            answer++;
-        }
-        return answer - 1;
-    }
-    public static int Problem47()
-    {
-        static int PrmFacNum(int num)
-        {
-            return UsefulTools.Prime_factors(num).Length;
-        }
-        int i = 2;
-        while (true)
-        {
-            if (PrmFacNum(i) == 4 && PrmFacNum(i + 1) == 4 && PrmFacNum(i + 2) == 4 && PrmFacNum(i + 3) == 4)
-            {
-                return i;
-            }
-            i++;
-        }
-    }
-    public static string Problem49()
-    {
-        string ans = "";
-        for (int i = 1000; i <= 9999; i++)
-        {
-            if (UsefulTools.IsPrime(i))
-            {
-                for (int j = 1; j < 8999; j++)
-                {
-                    if (UsefulTools.IsPrime(i + j) && UsefulTools.IsPrime(i + 2 * j) && UsefulTools.IsPermutation(i, i + j) && UsefulTools.IsPermutation(i, i + 2 * j)) ans += i.ToString() + (i + j).ToString() + (i + 2 * j).ToString() + '\n';
+                    for (int j = 1; j < 8999; j++)
+                    {
+                        if (UsefulTools.IsPrime(i + j) && UsefulTools.IsPrime(i + 2 * j) && UsefulTools.IsPermutation(i, i + j) && UsefulTools.IsPermutation(i, i + 2 * j)) ans += i.ToString() + (i + j).ToString() + (i + 2 * j).ToString() + '\n';
+                    }
                 }
             }
+            return ans;
         }
-        return ans;
-    }
-    public static int Problem51()
-    {
+        public static int Problem50()
+        {
+            PrimeChecker pm = new();
+            int answer = 0, max = 0;
+            List<int> primes = new();
+            for (int i = 2; i < 1000000; i++) if (pm.IsPrime(i)) primes.Add(i);
+            for (int i = 0; i < primes.Count; i++)
+            {
+                int sum = 0, j = i;
+                while (sum < 1000000 && j < primes.Count)
+                {
+                    sum += primes[j];
+                    if (pm.IsPrime(sum) && sum > max && j - i > max)
+                    {
+                        max = j - i;
+                        answer = sum;
+                    }
+                    j++;
+                }
+            }
+            return answer;
+        }
+        public static int Problem51()
+        {
 
         List<int> Familly(int[] digits, int starting_pos)
         {
@@ -1060,208 +1068,238 @@ namespace ProjectEuler
                 for (int i = 0; i < length; i++) new_digits[i] = digits[i];
                 new_digits[starting_pos++] = -1;
 
-                if (new_digits[0] == -1) starting_digit = 1;
-                for (int j = starting_digit; j < 10; j++)
-                {
-                    int[] digits2 = new int[length];
-                    for (int k = 0; k < length; k++)
+                    if (new_digits[0] == -1) starting_digit = 1;
+                    for (int j = starting_digit; j < 10; j++)
                     {
-                        if (new_digits[k] == -1) digits2[k] = j;
-                        else digits2[k] = new_digits[k];
-                    }
-                    int value = UsefulTools.DigitsToNum(digits2);
-                    if (UsefulTools.IsPrime(value))
-                    {
-                        familly.Add(value);
-                    }
-                }
-                if (Familly(digits, starting_pos).Count > familly.Count) familly = new List<int>(Familly(digits, starting_pos));
-                if (Familly(new_digits, starting_pos).Count > familly.Count) familly = new List<int>(Familly(new_digits, starting_pos));
-            }
-            return familly;
-        }
-
-        int num = 10;
-        while (true)
-        {
-            if (UsefulTools.IsPrime(num) && (Familly(UsefulTools.DigitsOfNum(num), 0).Count == 8) && Familly(UsefulTools.DigitsOfNum(num), 0).Contains(num)) return num;
-            num++;
-        }
-    }
-    public static int Problem52()
-    {
-        bool IsSameDigitMultiple(int[] nums)
-        {
-            for (int i = 0; i < nums.Length; i++)
-            {
-                for (int j = i + 1; j < nums.Length; j++)
-                {
-                    if (!IsSameDigit(nums[i], nums[j])) return false;
-                }
-            }
-            return true;
-        }
-        bool IsSameDigit(int num1, int num2)
-        {
-            int[] digits1 = UsefulTools.DigitsOfNum(num1);
-            int[] digits2 = UsefulTools.DigitsOfNum(num2);
-            if (Math.Floor(Math.Log10(num1)) != Math.Floor(Math.Log10(num2))) return false;
-            foreach (int digit in digits1) if (!digits2.Contains(digit)) return false;
-            return true;
-        }
-        int i = 1;
-        while (true)
-        {
-            int[] digits = { i, 2 * i, 3 * i, 4 * i, 5 * i, 6 * i };
-            if (IsSameDigitMultiple(digits)) return i;
-            i++;
-        }
-    }
-    public static int Problem55()
-    {
-        int answ = 0;
-        BigInteger ReverseNum(BigInteger x)
-        {
-            BigInteger y = 0, xsize = (int)Math.Floor(Math.Log10((double)x) + 1);
-            while (x > 0)
-            {
-                y += (BigInteger)Math.Pow(10, (double)xsize - 1) * (x % 10);
-                xsize--;
-                x /= 10;
-            }
-            return y;
-        }
-        for (int i = 1; i < 10000; i++)
-        {
-            int n = 0;
-            BigInteger num = i;
-            do
-            {
-                num += ReverseNum(num);
-                n++;
-            } while (n < 50 && !UsefulTools.IsPalindrome(num));
-            if (n == 50) answ++;
-        }
-        return answ;
-    }
-    public static int Problem58()
-    {
-        int num_of_primes_diagonal = 3, start = 3;
-        while ((double)num_of_primes_diagonal / (start * 2 - 1) >= 0.1)
-        {
-            int first_num = (int)Math.Pow(start, 2) + 1;
-            if (UsefulTools.IsPrime(first_num + start)) num_of_primes_diagonal++;
-            if (UsefulTools.IsPrime(first_num + (start * 2) + 1)) num_of_primes_diagonal++;
-            if (UsefulTools.IsPrime(first_num + (start * 3) + 2)) num_of_primes_diagonal++;
-            start += 2;
-        }
-        return start;
-    }
-
-
-    public static int Problem60()
-    {
-        PrimeChecker primeChecker = new();
-        bool AreConcatenaintable(BigInteger prime1, BigInteger prime2)
-        {
-            if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime2) + 1))) * prime1 + prime2)) return false;
-            if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)(BigInteger.Log10(prime1) + 1))) * prime2 + prime1)) return false;
-            return true;
-        }
-        Graph<int> graph = new();
-        int i = 3, answer = int.MaxValue / 2;
-        while (i < (answer + 12))
-        {
-            if (primeChecker.IsPrime(i))
-            {
-                Vertex<int> new_vertex = new(i);
-                List<Vertex<int>> neighbours = new();
-                foreach (Vertex<int> v in graph.Vertices)
-                {
-                    if (AreConcatenaintable(i, v.Value)) neighbours.Add(v);
-                }
-                new_vertex.AddNeighbours(neighbours);
-                graph.AddVertex(new_vertex);
-                foreach (Vertex<int> v in neighbours) v.AddNeighbour(new_vertex);
-                List<List<Vertex<int>>> cliques = graph.FindCliques(5);
-                if (cliques.Count > 0)
-                {
-                    foreach (List<Vertex<int>> clique in cliques)
-                    {
-                        int sum = 0;
-                        foreach (Vertex<int> v in clique)
+                        int[] digits2 = new int[length];
+                        for (int k = 0; k < length; k++)
                         {
-                            sum += v.Value;
+                            if (new_digits[k] == -1) digits2[k] = j;
+                            else digits2[k] = new_digits[k];
                         }
-                        if (sum < answer) answer = sum;
+                        int value = (int)UsefulTools.DigitsToNum(digits2);
+                        if (UsefulTools.IsPrime(value))
+                        {
+                            familly.Add(value);
+                        }
+                    }
+                    if (Familly(digits, starting_pos).Count > familly.Count) familly = new List<int>(Familly(digits, starting_pos));
+                    if (Familly(new_digits, starting_pos).Count > familly.Count) familly = new List<int>(Familly(new_digits, starting_pos));
+                }
+                return familly;
+            }
+
+            int num = 10;
+            while (true)
+            {
+                if (UsefulTools.IsPrime(num) && (Familly(UsefulTools.DigitsOfNum(num), 0).Count == 8) && Familly(UsefulTools.DigitsOfNum(num), 0).Contains(num)) return num;
+                num++;
+            }
+        }
+        public static int Problem52()
+        {
+            bool IsSameDigitMultiple(int[] nums)
+            {
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    for (int j = i + 1; j < nums.Length; j++)
+                    {
+                        if (!IsSameDigit(nums[i], nums[j])) return false;
                     }
                 }
+                return true;
             }
-            i++;
-        }
-        return (int)answer;
-    }
-    public static string Problem67()
-    {
-        return Problem18();
-    }
-    public static int Problem92()
-    {
-        int count = 0;
-        static int SquareOfDigits(int x)
-        {
-            int sum = 0;
-            while (x > 0)
+            bool IsSameDigit(int num1, int num2)
             {
-                sum += (x % 10) * (x % 10);
-                x /= 10;
+                int[] digits1 = UsefulTools.DigitsOfNum(num1);
+                int[] digits2 = UsefulTools.DigitsOfNum(num2);
+                if (Math.Floor(Math.Log10(num1)) != Math.Floor(Math.Log10(num2))) return false;
+                foreach (int digit in digits1) if (!digits2.Contains(digit)) return false;
+                return true;
             }
+            int i = 1;
+            while (true)
+            {
+                int[] digits = { i, 2 * i, 3 * i, 4 * i, 5 * i, 6 * i };
+                if (IsSameDigitMultiple(digits)) return i;
+                i++;
+            }
+        }
+        public static int Problem53()
+        {
+            var count = 0;
+            for(uint i = 1; i <= 100; i++)
+            {
+                for(uint j = 1; j <= i; j++)
+                {
+                    if (UsefulTools.BinomialCooficient(i, j) > 1000000) count++;
+                }
+            }
+            return count;
+        }
+        public static int Problem55()
+        {
+            int answ = 0;
+            BigInteger ReverseNum(BigInteger x)
+            {
+                BigInteger y = 0, xsize = (int)Math.Floor(Math.Log10((double)x) + 1);
+                while (x > 0)
+                {
+                    y += (BigInteger)Math.Pow(10, (double)xsize - 1) * (x % 10);
+                    xsize--;
+                    x /= 10;
+                }
+                return y;
+            }
+            for (int i = 1; i < 10000; i++)
+            {
+                int n = 0;
+                BigInteger num = i;
+                do
+                {
+                    num += ReverseNum(num);
+                    n++;
+                } while (n < 50 && !UsefulTools.IsPalindrome(num));
+                if (n == 50) answ++;
+            }
+            return answ;
+        }
+        public static int Problem58()
+        {
+            int num_of_primes_diagonal = 3, start = 3;
+            while ((double)num_of_primes_diagonal / (start * 2 - 1) >= 0.1)
+            {
+                int first_num = (int)Math.Pow(start, 2) + 1;
+                if (UsefulTools.IsPrime(first_num + start)) num_of_primes_diagonal++;
+                if (UsefulTools.IsPrime(first_num + (start * 2) + 1)) num_of_primes_diagonal++;
+                if (UsefulTools.IsPrime(first_num + (start * 3) + 2)) num_of_primes_diagonal++;
+                start += 2;
+            }
+            return start;
+        }
+
+
+        public static int Problem60()
+        {
+            PrimeChecker primeChecker = new();
+            bool AreConcatenaintable(int prime1, int prime2)
+            {
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)Math.Log10(prime2) + 1)) * prime1 + prime2)) return false;
+                if (!primeChecker.IsPrime((BigInteger.Pow(10, (int)Math.Log10(prime1) + 1)) * prime2 + prime1)) return false;
+                return true;
+            }
+            Graph<int> graph = new();
+            int i = 3, answer = int.MaxValue / 2;
+            while (i < (answer + 12))
+            {
+                if (primeChecker.IsPrime(i))
+                {
+                    Vertex<int> new_vertex = new(i);
+                    List<Vertex<int>> neighbours = new();
+                    foreach (Vertex<int> v in graph.Vertices)
+                    {
+                        if (AreConcatenaintable(i, v.Value)) neighbours.Add(v);
+                    }
+                    new_vertex.AddNeighbours(neighbours);
+                    graph.AddVertex(new_vertex);
+                    foreach (Vertex<int> v in neighbours) v.AddNeighbour(new_vertex);
+                    List<List<Vertex<int>>> cliques = graph.FindCliques(5);
+                    if (cliques.Count > 0)
+                    {
+                        foreach (List<Vertex<int>> clique in cliques)
+                        {
+                            int sum = 0;
+                            foreach (Vertex<int> v in clique)
+                            {
+                                sum += v.Value;
+                            }
+                            if (sum < answer) answer = sum;
+                        }
+                    }
+                }
+                i++;
+            }
+            return (int)answer;
+        }
+        public static string Problem67()
+        {
+            return Problem18();
+        }
+        public static int Problem112()
+        {
+            var i = 100;
+            var bouncy = 0;
+            static bool IsBouncy(int x)
+            {
+                var arr = UsefulTools.DigitsOfNum(x);
+                var ans1 = true;
+                var ans2 = true;
+                for (var i = 1; i < arr.Length; i++)
+                {
+                    if (arr[i] > arr[i - 1]) ans1 = false;
+                    if (arr[i] < arr[i - 1]) ans2 = false;
+                }
+                return !(ans1 || ans2);
+            }
+            while (true)
+            {
+                if (IsBouncy(i)) bouncy++;
+                if (bouncy * 100 >= i * 99) return i;
+                i++;
+            }
+
+        }
+        public static ulong Problem719() // works for 10^10 but takes too long for 10^12
+        {
+            List<ulong> AllSums(string x,  ulong maxValue, int index = 0)
+            {
+                if (x.Length == 1)
+                {
+                    return new() { Convert.ToUInt64(x) };
+                }
+                string begining_to_index = x[..(index + 1)];
+                if (index == x.Length - 1)
+                {
+                    return new() { Convert.ToUInt64(begining_to_index) };
+                }
+                List<ulong> sums1 = new();
+                foreach (var i in AllSums(x[(index + 1)..],maxValue))
+                {
+                    sums1.Add(i + Convert.ToUInt64(begining_to_index));
+                }
+                var value = sums1.Concat(AllSums(x,maxValue, index + 1)).ToList();
+                //value.RemoveAll(i => i > maxValue);
+                return value;
+            }
+            ulong sum = 0;
+            List<ulong> snumbers = new();
+            for (ulong i = 1; i * i <= 100000000000; i++)
+            {
+                var num = i * i;
+                var sums = AllSums(num.ToString(),i);
+                //if(sums.Count>0)sums.RemoveAt(sums.Count - 1);
+                foreach (var j in sums) if (j == i) snumbers.Add(num);
+            }
+            foreach (var i in snumbers.Distinct()) sum += i;
             return sum;
         }
-        for (int i = 2; i < 10000000; i++)
+        public static string Problem836()
         {
-            int x = i;
-            while (x != 1 && x != 89) x = SquareOfDigits(x);
-            if (x == 89) count++;
-        }
-        return count;
-    }
-    /* public static int Problem834() //unsolved
-     {
-         static BigInteger SequenceValue(BigInteger m, BigInteger n) => ((m + 1) * (2*n + m))/2;
-         static BigInteger SumT(BigInteger n)
-         {
-             string s = n.ToString() + ":";
-             var sum = 0;
-             for (var i = 1; i <= n * (n - 2); i++) if (SequenceValue(i, n) % (i + n) == 0)
-                 {
-                     s += " " + i.ToString();
-                     sum += i;
-                 }
-             Console.WriteLine(s);
-             return sum;
-         }
-         var sum = 0;
-         for (var i = 3; i <= 1234567; i++) sum += (int)SumT(i);
-         return sum;
-     }*/
-    public static string Problem836()
-    {
-        string text = UsefulTools.HTMLText(836);
-        string answer = "";
-        bool isbold = false;
-        for (int i = 0; i < text.Length; i++)
-        {
-            if (text[i] == '<' && text[i + 1] == 'b' && text[i + 2] == '>')
+            string text = UsefulTools.HTMLText(836);
+            string answer = "";
+            bool isbold = false;
+            for (int i = 0; i < text.Length; i++)
             {
-                answer += text[i + 3];
-                isbold = true;
+                if (text[i] == '<' && text[i + 1] == 'b' && text[i + 2] == '>')
+                {
+                    answer += text[i + 3];
+                    isbold = true;
+                }
+                if (isbold && text[i] == ' ') answer += text[i + 1];
+                if (text[i] == '<' && text[i + 1] == '/' && text[i + 2] == 'b' && text[i + 3] == '>') isbold = false;
             }
-            if (isbold && text[i] == ' ') answer += text[i + 1];
-            if (text[i] == '<' && text[i + 1] == '/' && text[i + 2] == 'b' && text[i + 3] == '>') isbold = false;
+            return answer;
         }
-        return answer;
     }
-}
 }
 

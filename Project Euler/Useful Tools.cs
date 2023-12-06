@@ -44,11 +44,11 @@ namespace ProjectEuler
             var problemText = pureText.Substring(startIndex + startingLength, endIndex - startIndex - startingLength - 3);
             return ($"\nProblem number {problemNumber}:\n{problemText}");
         }
-        public static long BinomialCooficient(long top, long bottom)
+        public static BigInteger BinomialCooficient(BigInteger top, BigInteger bottom)
         {
-            long answer = 1;
+            BigInteger answer = 1;
             if (bottom > top) return 0;
-            for (long d = 1; d <= bottom; d++)
+            for (BigInteger d = 1; d <= bottom; d++)
             {
                 answer *= top--;
                 answer /= d;
@@ -211,13 +211,10 @@ namespace ProjectEuler
             }
             return true;
         }
-        public static int DigitsToNum(int[] digits)
+        public static ulong DigitsToNum(int[] digits)
         {
-            int num = 0;
-            for (int i = 0; i < digits.Length; i++)
-            {
-                num += digits[digits.Length - i - 1] * (int)Math.Pow(10, i);
-            }
+            ulong num = 0;
+            for (int i = 0; i < digits.Length; i++) num += (ulong)digits[digits.Length - i - 1] * (ulong)Math.Pow(10, i);
             return num;
         }
 
@@ -230,16 +227,11 @@ namespace ProjectEuler
             }
             return x;
         }
-
         public static bool IsPandigital(int number)
         {
-            int size = (int)Math.Floor(Math.Log10(number) + 1);
-            if (size > 9) return false;
-            string num = number.ToString();
-            for (int i = 0; i < size; i++)
-            {
-                if (!num.Contains((i + 1).ToString())) return false;
-            }
+            var digits = DigitsOfNum(number);
+            if (digits.Length > 9) return false;
+            for (int i = 0; i < digits.Length; i++) if (!digits.Contains(i+1)) return false;
             return true;
         }
         public static int[] Prime_factors(int x)
@@ -429,6 +421,35 @@ namespace ProjectEuler
                 }
                 else Console.Write($"{solved[i]}\n\n");
             }
+        }
+        static void Swap(ref int a, ref int b) => (b, a) = (a, b);
+        static void GetPandigitalNums(int[] digits, int k, int m, ref List<ulong> pandigitals)
+        {
+            if (k == m && DigitsToNum(digits).ToString().Length==m+1)
+            {
+                pandigitals.Add(DigitsToNum(digits));
+            }
+            else
+            {
+                for (int i = k; i <= m; i++)
+                {
+                    Swap(ref digits[k], ref digits[i]);
+                    GetPandigitalNums(digits, k + 1, m, ref pandigitals);
+                    Swap(ref digits[k], ref digits[i]);
+                }
+            }
+        }
+
+        public static List<ulong> PandigitalNumsDescending(int size, int start)
+        {
+            if (size+start > 10) return new();
+            int[] digits = new int[size];
+            for (int i = 0; i < size; i++) digits[i] = i + start;
+            List<ulong> pandigitals = new();
+            GetPandigitalNums(digits, 0, size - 1, ref pandigitals);
+            pandigitals.Sort();
+            pandigitals.Reverse();
+            return pandigitals;
         }
     }
     class Graph<T>
