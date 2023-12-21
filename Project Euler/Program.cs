@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-
+using ProjectEuler.Problems;
 namespace ProjectEuler
 {
     internal static class ProjectEuler
@@ -11,7 +11,6 @@ namespace ProjectEuler
             var programActive = true;
             var chosenProblem = 0;
             const int numberOfProblems = 851;
-            
             while (programActive)
             {
                 var probNumBool = true;
@@ -60,7 +59,7 @@ namespace ProjectEuler
                 {
                     UsefulTools.WriteOutSolved();
                 }
-                ProblemsSolved.ChosenProblem(chosenProblem, true, true);
+                ProblemRunner.ChosenProblem(chosenProblem, true, true);
             }
         }
     }

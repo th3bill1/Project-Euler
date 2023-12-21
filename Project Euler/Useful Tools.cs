@@ -299,11 +299,11 @@ namespace ProjectEuler
             {
                 stopwatch.Reset();
                 stopwatch.Start();
-                ProblemsSolved.ChosenProblem(i, false, false);
+                ProblemRunner.ChosenProblem(i, false, false);
                 stopwatch.Stop();
                 allTimes[i - 1, 1] = i;
                 allTimes[i - 1, 0] = stopwatch.ElapsedMilliseconds;
-                if (ProblemsSolved.ChosenProblemNumber != i)
+                if (ProblemRunner.ChosenProblemNumber != i)
                 {
                     allTimes[i - 1, 0] = -1;
                 }
@@ -394,13 +394,13 @@ namespace ProjectEuler
             int howmany = 0;
             for (int i = 0; i < 300; i++)
             {
-                if (ProblemsSolved.DoesProblemExist(i)) howmany++;
+                if (ProblemRunner.DoesProblemExist(i)) howmany++;
             }
             int[] solved = new int[howmany];
             int index = 0;
             for (int i = 1; i < 300; i++)
             {
-                if (ProblemsSolved.DoesProblemExist(i)) solved[index++] = i;
+                if (ProblemRunner.DoesProblemExist(i)) solved[index++] = i;
             }
             Console.Write($"\n\nThere are {howmany} problems solved: ");
             int x = 0;
